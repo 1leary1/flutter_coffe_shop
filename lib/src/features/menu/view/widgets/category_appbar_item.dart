@@ -4,9 +4,17 @@ import 'package:flutter/material.dart';
 
 class CategoryAppbarItem extends StatefulWidget {
   final CategoryModel? model;
-  bool isSelected;
-  CategoryAppbarItem(
-      {super.key, required this.model, required this.isSelected});
+  late int selectedIndex;
+  late int currentIndex;
+  Function onTap;
+
+  CategoryAppbarItem({
+    super.key,
+    required this.model,
+    required this.selectedIndex,
+    required this.currentIndex,
+    required this.onTap,
+  });
 
   @override
   State<CategoryAppbarItem> createState() => _CategoryAppbarItemState();
@@ -15,17 +23,25 @@ class CategoryAppbarItem extends StatefulWidget {
 class _CategoryAppbarItemState extends State<CategoryAppbarItem> {
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-      style: TextButton.styleFrom(
-        backgroundColor:
-            widget.isSelected ? AppColors.primary : AppColors.white,
-        shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(16))),
-      ),
-      onPressed: () {
-        print('Pressed');
-      },
-      child: Text(widget.model?.title ?? 'loading'),
+    return Row(
+      children: [
+        TextButton(
+          style: TextButton.styleFrom(
+            backgroundColor: widget.selectedIndex == widget.currentIndex
+                ? AppColors.primary
+                : AppColors.white,
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(16))),
+          ),
+          onPressed: () {
+            widget.onTap();
+          },
+          child: Text(widget.model?.title ?? 'loading'),
+        ),
+        const SizedBox(
+          width: 8,
+        )
+      ],
     );
   }
 }
