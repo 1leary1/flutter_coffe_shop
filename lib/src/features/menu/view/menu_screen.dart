@@ -6,12 +6,13 @@ import '../modeles/drink_model.dart';
 class MenuScreen extends StatelessWidget {
   MenuScreen({super.key});
 
-  DrinkModel model1 =
+  final DrinkModel model1 =
       DrinkModel(image: 'assets/coffe1.png', name: 'Кофе', price: 123);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: Text('ok')),
       body: DrinkCard(model: model1),
     );
   }

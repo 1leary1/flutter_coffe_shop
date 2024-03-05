@@ -1,4 +1,5 @@
 import 'package:coffe_shop/src/features/menu/modeles/drink_model.dart';
+import 'package:coffe_shop/src/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class DrinkCard extends StatefulWidget {
@@ -24,7 +25,7 @@ class _DrinkCardState extends State<DrinkCard> {
     });
   }
 
-  Widget _PriceOrCount() {
+  Widget _priceOrCount() {
     if (_count > 0) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -32,14 +33,14 @@ class _DrinkCardState extends State<DrinkCard> {
           GestureDetector(
             onTap: _decrementCouner,
             child: Container(
-              child: const Center(
-                child: Text('-'),
-              ),
               width: 30,
               height: 30,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(100),
-                color: Colors.blue.shade500,
+                color: AppColors.primary,
+              ),
+              child: const Center(
+                child: Text('-'),
               ),
             ),
           ),
@@ -51,7 +52,7 @@ class _DrinkCardState extends State<DrinkCard> {
             width: 50,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
-              color: Colors.blue.shade500,
+              color: AppColors.primary,
             ),
             child: Padding(
               padding: const EdgeInsets.all(4.0),
@@ -68,9 +69,9 @@ class _DrinkCardState extends State<DrinkCard> {
               height: 30,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(100),
-                color: Colors.blue.shade500,
+                color: AppColors.primary,
               ),
-              child: Center(
+              child: const Center(
                 child: Text('+'),
               ),
             ),
@@ -85,7 +86,7 @@ class _DrinkCardState extends State<DrinkCard> {
           height: 30,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
-            color: Colors.blue.shade500,
+            color: AppColors.primary,
           ),
           child: Padding(
             padding: const EdgeInsets.all(4.0),
@@ -114,7 +115,6 @@ class _DrinkCardState extends State<DrinkCard> {
             Image.asset(
               widget.model?.image ?? 'assets/drink_null.png',
               height: 100,
-              width: 100,
             ),
             const SizedBox(
               height: 4,
@@ -123,7 +123,7 @@ class _DrinkCardState extends State<DrinkCard> {
             const SizedBox(
               height: 4,
             ),
-            _PriceOrCount(),
+            _priceOrCount(),
           ],
         ),
       ),
