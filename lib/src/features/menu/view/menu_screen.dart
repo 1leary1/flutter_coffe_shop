@@ -1,6 +1,5 @@
 import 'package:coffe_shop/src/features/menu/modeles/category_model.dart';
 import 'package:coffe_shop/src/features/menu/view/widgets/category_appbar.dart';
-import 'package:coffe_shop/src/features/menu/view/widgets/category_sliver.dart';
 import 'package:coffe_shop/src/features/menu/view/widgets/drink_card.dart';
 import 'package:coffe_shop/src/theme/app_colors.dart';
 import 'package:coffe_shop/src/theme/image_sources.dart';
@@ -9,7 +8,7 @@ import 'package:flutter/material.dart';
 import '../modeles/drink_model.dart';
 
 class MenuScreen extends StatefulWidget {
-  MenuScreen({super.key});
+  const MenuScreen({super.key});
 
   @override
   State<MenuScreen> createState() => _MenuScreenState();
@@ -17,31 +16,48 @@ class MenuScreen extends StatefulWidget {
 
 class _MenuScreenState extends State<MenuScreen> {
   final List<CategoryModel> categories = [
-    CategoryModel(title: 'Черный Кофе', drinksList: [
-      DrinkModel(image: ImageSources.coffe, name: 'Кофе', price: 123),
-      DrinkModel(image: ImageSources.coffe, name: 'Кофе', price: 123),
-      DrinkModel(image: ImageSources.coffe, name: 'Кофе', price: 123),
-      DrinkModel(image: ImageSources.coffe, name: 'Кофе', price: 123),
-    ]),
-    CategoryModel(title: 'Зеленый Чай', drinksList: [
-      DrinkModel(image: ImageSources.coffe, name: 'Кофе', price: 123),
-      DrinkModel(image: ImageSources.coffe, name: 'Кофе', price: 123),
-      DrinkModel(image: ImageSources.coffe, name: 'Кофе', price: 123),
-    ]),
-    CategoryModel(title: 'Синий Пуэр', drinksList: [
-      DrinkModel(image: ImageSources.coffe, name: 'Кофе', price: 123),
-      DrinkModel(image: ImageSources.coffe, name: 'Кофе', price: 123),
-    ]),
-    CategoryModel(title: 'Оранжевый Улун', drinksList: [
-      DrinkModel(image: ImageSources.coffe, name: 'Кофе', price: 123),
-      DrinkModel(image: ImageSources.coffe, name: 'Кофе', price: 123),
-    ]),
+    CategoryModel(
+        horizonalKey: GlobalKey(),
+        verticalKey: GlobalKey(),
+        title: 'Черный Кофе',
+        drinksList: [
+          DrinkModel(image: ImageSources.coffe, name: 'Кофе', price: 123),
+          DrinkModel(image: ImageSources.coffe, name: 'Кофе', price: 123),
+          DrinkModel(image: ImageSources.coffe, name: 'Кофе', price: 123),
+          DrinkModel(image: ImageSources.coffe, name: 'Кофе', price: 123),
+        ]),
+    CategoryModel(
+        horizonalKey: GlobalKey(),
+        verticalKey: GlobalKey(),
+        title: 'Зеленый Чай',
+        drinksList: [
+          DrinkModel(image: ImageSources.coffe, name: 'Кофе', price: 123),
+          DrinkModel(image: ImageSources.coffe, name: 'Кофе', price: 123),
+          DrinkModel(image: ImageSources.coffe, name: 'Кофе', price: 123),
+        ]),
+    CategoryModel(
+        horizonalKey: GlobalKey(),
+        verticalKey: GlobalKey(),
+        title: 'Синий Пуэр',
+        drinksList: [
+          DrinkModel(image: ImageSources.coffe, name: 'Кофе', price: 123),
+          DrinkModel(image: ImageSources.coffe, name: 'Кофе', price: 123),
+        ]),
+    CategoryModel(
+        horizonalKey: GlobalKey(),
+        verticalKey: GlobalKey(),
+        title: 'Оранжевый Улун',
+        drinksList: [
+          DrinkModel(image: ImageSources.coffe, name: 'Кофе', price: 123),
+          DrinkModel(image: ImageSources.coffe, name: 'Кофе', price: 123),
+        ]),
   ];
 
   List<Widget> _getSliverWidgets() {
     List<Widget> slivers = [];
     for (int i = 0; i < categories.length; i++) {
       slivers.add(SliverAppBar(
+        key: categories[i].verticalKey,
         titleSpacing: 0,
         backgroundColor: Colors.transparent,
         title: Text(
@@ -74,7 +90,7 @@ class _MenuScreenState extends State<MenuScreen> {
       appBar: AppBar(
         titleSpacing: 0,
         backgroundColor: Colors.transparent,
-        title: Container(height: 100, child: Categories(model: categories)),
+        title: SizedBox(height: 100, child: Categories(model: categories)),
       ),
       backgroundColor: AppColors.background,
       body: Padding(

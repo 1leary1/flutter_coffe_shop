@@ -13,7 +13,7 @@ class CoffeShop extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: theme,
-      home: MenuScreen(),
+      home: const MenuScreen(),
     );
   }
 }

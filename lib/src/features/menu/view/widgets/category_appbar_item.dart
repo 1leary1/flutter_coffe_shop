@@ -6,10 +6,12 @@ class CategoryAppbarItem extends StatelessWidget {
   final CategoryModel? model;
   late int selectedIndex;
   late int currentIndex;
-  Function onTap;
+  late Function onTap;
+  final GlobalKey horizontalKey;
 
   CategoryAppbarItem({
     super.key,
+    required this.horizontalKey,
     required this.model,
     required this.selectedIndex,
     required this.currentIndex,
@@ -23,22 +25,24 @@ class CategoryAppbarItem extends StatelessWidget {
         SizedBox(
           width: currentIndex == 0 ? 16 : 0,
         ),
-        TextButton(
-          style: TextButton.styleFrom(
-            backgroundColor: selectedIndex == currentIndex
-                ? AppColors.primary
-                : AppColors.white,
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(16))),
-          ),
-          onPressed: () {
-            onTap();
-          },
-          child: Text(
-            model?.title ?? 'loading',
-            style: selectedIndex == currentIndex
-                ? Theme.of(context).textTheme.headlineMedium
-                : Theme.of(context).textTheme.displayMedium,
+        SizedBox(
+          child: TextButton(
+            style: TextButton.styleFrom(
+              backgroundColor: selectedIndex == currentIndex
+                  ? AppColors.primary
+                  : AppColors.white,
+              shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(16))),
+            ),
+            onPressed: () {
+              onTap();
+            },
+            child: Text(
+              model?.title ?? 'loading',
+              style: selectedIndex == currentIndex
+                  ? Theme.of(context).textTheme.headlineMedium
+                  : Theme.of(context).textTheme.displayMedium,
+            ),
           ),
         ),
         const SizedBox(
