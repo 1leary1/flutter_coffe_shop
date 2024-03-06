@@ -1,5 +1,6 @@
 import 'package:coffe_shop/src/features/menu/modeles/drink_model.dart';
 import 'package:coffe_shop/src/theme/app_colors.dart';
+import 'package:coffe_shop/src/theme/image_sources.dart';
 import 'package:flutter/material.dart';
 
 class DrinkCard extends StatefulWidget {
@@ -28,51 +29,52 @@ class _DrinkCardState extends State<DrinkCard> {
   Widget _priceOrCount() {
     if (_count > 0) {
       return Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           GestureDetector(
             onTap: _decrementCouner,
             child: Container(
-              width: 30,
-              height: 30,
+              width: 25,
+              height: 25,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(100),
                 color: AppColors.primary,
               ),
-              child: const Center(
-                child: Text('-'),
+              child: Center(
+                child: Text(
+                  '–',
+                  style: Theme.of(context).textTheme.displaySmall,
+                ),
               ),
             ),
           ),
-          const SizedBox(
-            width: 10,
-          ),
           Container(
-            height: 30,
-            width: 50,
+            height: 25,
+            width: 46,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
               color: AppColors.primary,
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Center(child: Text(_count.toString())),
-            ),
-          ),
-          const SizedBox(
-            width: 10,
+            child: Center(
+                child: Text(
+              _count.toString(),
+              style: Theme.of(context).textTheme.displaySmall,
+            )),
           ),
           GestureDetector(
             onTap: _incrementCouner,
             child: Container(
-              width: 30,
-              height: 30,
+              width: 25,
+              height: 25,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(100),
                 color: AppColors.primary,
               ),
-              child: const Center(
-                child: Text('+'),
+              child: Center(
+                child: Text(
+                  '+',
+                  style: Theme.of(context).textTheme.displaySmall,
+                ),
               ),
             ),
           ),
@@ -82,17 +84,16 @@ class _DrinkCardState extends State<DrinkCard> {
       return GestureDetector(
         onTap: _incrementCouner,
         child: Container(
-          width: 128,
-          height: 30,
+          height: 25,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
             color: AppColors.primary,
           ),
-          child: Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: Center(
-                child: Text(
-                    '${widget.model?.price.toString() ?? 'loading'} руб.')),
+          child: Center(
+            child: Text(
+              '${widget.model?.price.toString() ?? 'loading'} руб.',
+              style: Theme.of(context).textTheme.displaySmall,
+            ),
           ),
         ),
       );
@@ -103,25 +104,23 @@ class _DrinkCardState extends State<DrinkCard> {
   Widget build(BuildContext context) {
     return Container(
       width: 180,
-      height: 192,
+      height: 196,
       decoration: BoxDecoration(
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Image.asset(
-              widget.model?.image ?? 'assets/drink_null.png',
+              widget.model?.image ?? ImageSources.nullDrink,
               height: 100,
             ),
-            const SizedBox(
-              height: 4,
-            ),
-            Text(widget.model?.name ?? 'Drink'),
-            const SizedBox(
-              height: 4,
+            Text(
+              widget.model?.name ?? 'Drink',
+              style: Theme.of(context).textTheme.displayMedium,
             ),
             _priceOrCount(),
           ],

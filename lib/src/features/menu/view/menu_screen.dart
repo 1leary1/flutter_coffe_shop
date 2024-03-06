@@ -2,6 +2,8 @@ import 'package:coffe_shop/src/features/menu/modeles/category_model.dart';
 import 'package:coffe_shop/src/features/menu/view/widgets/category_appbar.dart';
 import 'package:coffe_shop/src/features/menu/view/widgets/category_sliver.dart';
 import 'package:coffe_shop/src/features/menu/view/widgets/drink_card.dart';
+import 'package:coffe_shop/src/theme/app_colors.dart';
+import 'package:coffe_shop/src/theme/image_sources.dart';
 import 'package:flutter/material.dart';
 
 import '../modeles/drink_model.dart';
@@ -14,42 +16,73 @@ class MenuScreen extends StatefulWidget {
 }
 
 class _MenuScreenState extends State<MenuScreen> {
-  final List<DrinkModel> drinks = [
-    DrinkModel(image: 'assets/coffe1.png', name: 'Кофе', price: 123),
-    DrinkModel(image: 'assets/coffe1.png', name: 'Кофе', price: 123),
-  ];
-
-  final model1 =
-      DrinkModel(image: 'assets/coffe1.png', name: 'Кофе', price: 123);
-
   final List<CategoryModel> categories = [
-    CategoryModel(title: 'Эшьпошьмак', drinksList: [
-      DrinkModel(image: 'assets/coffe1.png', name: 'Кофе', price: 123),
-      DrinkModel(image: 'assets/coffe1.png', name: 'Кофе', price: 123),
+    CategoryModel(title: 'Черный Кофе', drinksList: [
+      DrinkModel(image: ImageSources.coffe, name: 'Кофе', price: 123),
+      DrinkModel(image: ImageSources.coffe, name: 'Кофе', price: 123),
+      DrinkModel(image: ImageSources.coffe, name: 'Кофе', price: 123),
+      DrinkModel(image: ImageSources.coffe, name: 'Кофе', price: 123),
     ]),
-    CategoryModel(title: 'Эшьпошьмак', drinksList: [
-      DrinkModel(image: 'assets/coffe1.png', name: 'Кофе', price: 123),
-      DrinkModel(image: 'assets/coffe1.png', name: 'Кофе', price: 123),
+    CategoryModel(title: 'Зеленый Чай', drinksList: [
+      DrinkModel(image: ImageSources.coffe, name: 'Кофе', price: 123),
+      DrinkModel(image: ImageSources.coffe, name: 'Кофе', price: 123),
+      DrinkModel(image: ImageSources.coffe, name: 'Кофе', price: 123),
     ]),
-    CategoryModel(title: 'Эшьпошьмак', drinksList: [
-      DrinkModel(image: 'assets/coffe1.png', name: 'Кофе', price: 123),
-      DrinkModel(image: 'assets/coffe1.png', name: 'Кофе', price: 123),
+    CategoryModel(title: 'Синий Пуэр', drinksList: [
+      DrinkModel(image: ImageSources.coffe, name: 'Кофе', price: 123),
+      DrinkModel(image: ImageSources.coffe, name: 'Кофе', price: 123),
     ]),
-    CategoryModel(title: 'Эшьпошьмак', drinksList: [
-      DrinkModel(image: 'assets/coffe1.png', name: 'Кофе', price: 123),
-      DrinkModel(image: 'assets/coffe1.png', name: 'Кофе', price: 123),
+    CategoryModel(title: 'Оранжевый Улун', drinksList: [
+      DrinkModel(image: ImageSources.coffe, name: 'Кофе', price: 123),
+      DrinkModel(image: ImageSources.coffe, name: 'Кофе', price: 123),
     ]),
   ];
+
+  List<Widget> _getSliverWidgets() {
+    List<Widget> slivers = [];
+    for (int i = 0; i < categories.length; i++) {
+      slivers.add(SliverAppBar(
+        titleSpacing: 0,
+        backgroundColor: Colors.transparent,
+        title: Text(
+          categories[i].title ?? 'Loading',
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
+      ));
+      slivers.add(SliverGrid(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisSpacing: 8,
+          mainAxisSpacing: 8,
+          crossAxisCount: 2,
+        ),
+        delegate: SliverChildBuilderDelegate(
+          (BuildContext context, int index) {
+            return DrinkCard(
+              model: categories[i].drinksList[index],
+            );
+          },
+          childCount: categories[i].drinksList.length,
+        ),
+      ));
+    }
+    return slivers;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        titleSpacing: 0,
         backgroundColor: Colors.transparent,
         title: Container(height: 100, child: Categories(model: categories)),
       ),
-      backgroundColor: Colors.grey,
-      body: DrinkCard(model: model1),
+      backgroundColor: AppColors.background,
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: CustomScrollView(
+          slivers: _getSliverWidgets(),
+        ),
+      ),
     );
   }
 }
