@@ -1,3 +1,4 @@
+import 'package:coffe_shop/src/features/menu/view/widgets/category_appbar.dart';
 import 'package:flutter/material.dart';
 
 class ScrollServices {
@@ -10,5 +11,11 @@ class ScrollServices {
         curve: Curves.easeInOut,
       );
     }
+  }
+
+  static void scrollToItemOnTap(
+      int index, int selectedCategoryIndex, Categories widget) {
+    selectedCategoryIndex = index;
+    ScrollServices.scrollToItem(widget.model[index]!.verticalKey);
   }
 }

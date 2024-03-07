@@ -5,20 +5,21 @@ import 'package:flutter/material.dart';
 
 class Categories extends StatefulWidget {
   final List<CategoryModel?> model;
+  late int selectedCategoryIndex;
 
-  const Categories({super.key, required this.model});
+  Categories(
+      {super.key, required this.model, required this.selectedCategoryIndex});
 
   @override
   State<Categories> createState() => _CategoriesState();
 }
 
 class _CategoriesState extends State<Categories> {
-  late int _selectedCategoryIndex = 0;
-
   _onTap(int index) {
     setState(() {
-      _selectedCategoryIndex = index;
+      widget.selectedCategoryIndex = index;
       ScrollServices.scrollToItem(widget.model[index]!.verticalKey);
+      ScrollServices.scrollToItem(widget.model[index]!.horizonalKey);
     });
   }
 
@@ -29,9 +30,9 @@ class _CategoriesState extends State<Categories> {
       itemCount: widget.model.length,
       itemBuilder: ((context, index) {
         return CategoryAppbarItem(
-          horizontalKey: GlobalKey(),
+          horizontalKey: widget.model[index]!.horizonalKey,
           model: widget.model[index],
-          selectedIndex: _selectedCategoryIndex,
+          selectedIndex: widget.selectedCategoryIndex,
           currentIndex: index,
           onTap: () {
             _onTap(index);
