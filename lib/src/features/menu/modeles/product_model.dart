@@ -1,9 +1,9 @@
-class DrinkModel {
+class ProductModel {
   final String image;
   final String name;
   final int price;
 
-  DrinkModel({
+  ProductModel({
     required this.image,
     required this.name,
     required this.price,

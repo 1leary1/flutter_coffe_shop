@@ -7,11 +7,9 @@ class CategoryAppbarItem extends StatelessWidget {
   late int selectedIndex;
   late int currentIndex;
   late Function onTap;
-  final GlobalKey horizontalKey;
 
   CategoryAppbarItem({
     super.key,
-    required this.horizontalKey,
     required this.model,
     required this.selectedIndex,
     required this.currentIndex,

@@ -1,17 +1,17 @@
-import 'package:coffe_shop/src/features/menu/modeles/drink_model.dart';
+import 'package:coffe_shop/src/features/menu/modeles/product_model.dart';
 import 'package:coffe_shop/src/theme/app_colors.dart';
 import 'package:coffe_shop/src/theme/image_sources.dart';
 import 'package:flutter/material.dart';
 
-class DrinkCard extends StatefulWidget {
-  final DrinkModel? model;
-  const DrinkCard({super.key, required this.model});
+class ProductCard extends StatefulWidget {
+  final ProductModel? model;
+  const ProductCard({super.key, required this.model});
 
   @override
-  State<DrinkCard> createState() => _DrinkCardState();
+  State<ProductCard> createState() => _ProductCardState();
 }
 
-class _DrinkCardState extends State<DrinkCard> {
+class _ProductCardState extends State<ProductCard> {
   int _count = 0;
 
   _incrementCouner() {
