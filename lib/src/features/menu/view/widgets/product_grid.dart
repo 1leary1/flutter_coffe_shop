@@ -1,5 +1,4 @@
 import 'package:coffe_shop/src/features/menu/modeles/category_model.dart';
-import 'package:coffe_shop/src/features/menu/modeles/product_model.dart';
 import 'package:coffe_shop/src/features/menu/view/widgets/product_card.dart';
 import 'package:flutter/material.dart';
 
@@ -31,9 +30,9 @@ class ProdustGrid extends StatelessWidget {
             mainAxisSpacing: 8,
             crossAxisCount: 2,
           ),
-          itemCount: model.drinksList.length,
+          itemCount: model.productsList.length,
           itemBuilder: (context, index) {
-            return ProductCard(model: model.drinksList[index]);
+            return ProductCard(model: model.productsList[index]);
           },
         ),
       ],

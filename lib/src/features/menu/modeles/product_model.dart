@@ -1,10 +1,10 @@
 class ProductModel {
-  final String image;
+  final String imageUrl;
   final String name;
-  final int price;
+  final String price;
 
   ProductModel({
-    required this.image,
+    required this.imageUrl,
     required this.name,
     required this.price,
   });

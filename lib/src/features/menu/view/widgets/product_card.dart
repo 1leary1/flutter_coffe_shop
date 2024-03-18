@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:coffe_shop/src/features/menu/modeles/product_model.dart';
 import 'package:coffe_shop/src/theme/app_colors.dart';
 import 'package:coffe_shop/src/theme/image_sources.dart';
@@ -103,7 +104,6 @@ class _ProductCardState extends State<ProductCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 180,
       height: 196,
       decoration: BoxDecoration(
         color: AppColors.white,
@@ -114,9 +114,21 @@ class _ProductCardState extends State<ProductCard> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Image.asset(
-              widget.model?.image ?? ImageSources.nullDrink,
+            CachedNetworkImage(
               height: 100,
+              imageUrl: widget.model?.imageUrl ?? ImageSources.nullDrink,
+              progressIndicatorBuilder: (context, url, downloadProgress) =>
+                  Center(
+                child: SizedBox(
+                  width: 50,
+                  height: 50,
+                  child: CircularProgressIndicator(
+                    value: downloadProgress.progress,
+                    color: AppColors.primary,
+                  ),
+                ),
+              ),
+              errorWidget: (context, url, error) => const Icon(Icons.error),
             ),
             Text(
               widget.model?.name ?? 'Drink',
