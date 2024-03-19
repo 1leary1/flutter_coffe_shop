@@ -2,6 +2,8 @@ import 'package:coffe_shop/src/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 final theme = ThemeData(
+  canvasColor: Colors.transparent,
+  bottomSheetTheme: const BottomSheetThemeData(backgroundColor: Colors.white),
   textTheme: const TextTheme(
     displayMedium: TextStyle(
       color: AppColors.black,
