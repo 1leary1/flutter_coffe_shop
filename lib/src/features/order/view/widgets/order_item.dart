@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:coffe_shop/src/features/menu/modeles/product_model.dart';
 import 'package:coffe_shop/src/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class OrderItem extends StatelessWidget {
-  const OrderItem({super.key});
+  final ProductModel model;
+  const OrderItem({super.key, required this.model});
 
   @override
   Widget build(BuildContext context) {
@@ -15,9 +17,7 @@ class OrderItem extends StatelessWidget {
             CachedNetworkImage(
               height: 55,
               width: 55,
-              //Добавить урл модели
-              imageUrl:
-                  'https://master-cofe.ru/wp-content/uploads/2019/07/788772_1538912168.9453_original.jpg',
+              imageUrl: model.imageUrl,
               progressIndicatorBuilder: (context, url, downloadProgress) =>
                   Center(
                 child: SizedBox(
@@ -35,14 +35,13 @@ class OrderItem extends StatelessWidget {
               width: 8,
             ),
             Text(
-              'Олеато',
+              model.name,
               style: Theme.of(context).textTheme.displayMedium,
             ),
           ],
         ),
-        // Внести цену модели
         Text(
-          '139 ₽',
+          model.price,
           style: Theme.of(context).textTheme.displayMedium,
         ),
       ],

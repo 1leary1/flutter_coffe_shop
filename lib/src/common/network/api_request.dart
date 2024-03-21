@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:coffe_shop/src/common/network/models/category_api_model.dart';
 import 'package:coffe_shop/src/common/network/models/product_api_model.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class ApiRequest {
@@ -32,6 +33,26 @@ class ApiRequest {
       return categories;
     } else {
       throw Exception('Server is not response');
+    }
+  }
+
+  static Future<void> postOrder(BuildContext context) async {
+    final response = await http.post(
+        Uri.parse('https://coffeeshop.academy.effective.band/api/v1/orders'));
+    if (response.statusCode == 307) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Заказ создан'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Возникла ошибка при заказе'),
+          duration: Duration(seconds: 2),
+        ),
+      );
     }
   }
 }

@@ -1,7 +1,9 @@
-import 'package:coffe_shop/src/features/menu/bloc/products_bloc.dart';
+import 'package:coffe_shop/src/features/menu/bloc/products/products_bloc.dart';
 import 'package:coffe_shop/src/features/menu/modeles/category_model.dart';
+import 'package:coffe_shop/src/features/menu/modeles/product_model.dart';
 import 'package:coffe_shop/src/features/menu/view/widgets/category_appbar.dart';
 import 'package:coffe_shop/src/features/menu/view/widgets/product_grid.dart';
+import 'package:coffe_shop/src/features/order/bloc/order_bloc.dart';
 import 'package:coffe_shop/src/features/order/view/widgets/cart_button.dart';
 import 'package:coffe_shop/src/theme/app_colors.dart';
 import 'package:flutter/material.dart';
@@ -21,42 +23,26 @@ class _MenuScreenState extends State<MenuScreen> {
     const CategoryModel(title: 'Загрузка...', productsList: []),
   ];
 
-  final _productsBloc = ProductsBloc(
-    GetIt.I<List<CategoryModel>>(),
-  );
+  final _productsBloc = ProductsBloc(GetIt.I<List<CategoryModel>>());
+  final _orderBloc = OrderBloc(GetIt.I<List<ProductModel>>());
   final itemMenuScrollController = ItemScrollController();
   final itemAppbarScrollController = ItemScrollController();
   final itemPositionsListener = ItemPositionsListener.create();
   late int selectedCategoryIndex;
-  //late List<CategoryModel> data = [];
 
   @override
   void initState() {
     _productsBloc.add(ProductsLoadingEvent());
     super.initState();
-    //_fetchData();
-    //data = loadingData;
     itemPositionsListener.itemPositions.addListener(_onChageVisibility);
     selectedCategoryIndex = 0;
   }
 
-  //Future<void> _fetchData() async {
-  //  try {
-  //    List<CategoryApiModel> apiCategories = await ApiRequest.getCategories();
-  //    final _data = await ModelAdapter.adaptCategoryList(apiCategories);
-  //    setState(() {
-  //      data = _data;
-  //    });
-  //  } catch (e) {
-  //    debugPrint(e.toString());
-  //  }
-  //}
-
-  _onChageVisibility() {
+  void _onChageVisibility() {
     final indices = itemPositionsListener.itemPositions.value
         .map((item) => item.index)
         .toList();
-
+    if (indices.isEmpty) return;
     if (selectedCategoryIndex != indices[0]) {
       setState(() {
         selectedCategoryIndex = indices[0];
@@ -71,29 +57,79 @@ class _MenuScreenState extends State<MenuScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        titleSpacing: 0,
-        backgroundColor: Colors.transparent,
-        title: SizedBox(
-          height: 100,
+    return BlocProvider(
+      create: (context) => _orderBloc,
+      child: Scaffold(
+        appBar: AppBar(
+          titleSpacing: 0,
+          backgroundColor: Colors.transparent,
+          title: SizedBox(
+            height: 100,
+            child: BlocBuilder<ProductsBloc, ProductsState>(
+              bloc: _productsBloc,
+              builder: (context, state) {
+                if (state is ProductsLoading) {
+                  return CategoriesAppBar(
+                    appBarItemScrollController: itemAppbarScrollController,
+                    menuItemScrollController: itemMenuScrollController,
+                    selectedCategoryIndex: selectedCategoryIndex,
+                    model: const [
+                      CategoryModel(title: "Загрузка...", productsList: [])
+                    ],
+                  );
+                }
+                if (state is ProductsLoaded) {
+                  return CategoriesAppBar(
+                    appBarItemScrollController: itemAppbarScrollController,
+                    menuItemScrollController: itemMenuScrollController,
+                    selectedCategoryIndex: selectedCategoryIndex,
+                    model: state.categories,
+                  );
+                }
+                return const Center(
+                    child: CircularProgressIndicator(
+                  color: AppColors.white,
+                ));
+              },
+            ),
+          ),
+        ),
+        backgroundColor: AppColors.background,
+        floatingActionButton: BlocBuilder<OrderBloc, OrderState>(
+          bloc: _orderBloc,
+          builder: (context, state) {
+            if (state is OrderBaseState) {
+              double totalSum = state.products.fold(
+                  0,
+                  (double sum, ProductModel product) =>
+                      sum + double.parse(product.price));
+              return CartButton(
+                context: context,
+                totalPrice: totalSum.toInt(),
+              );
+            }
+            return Container();
+          },
+        ),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: BlocBuilder<ProductsBloc, ProductsState>(
             bloc: _productsBloc,
             builder: (context, state) {
               if (state is ProductsLoading) {
-                return CategoriesAppBar(
-                  appBarItemScrollController: itemAppbarScrollController,
-                  menuItemScrollController: itemMenuScrollController,
-                  selectedCategoryIndex: selectedCategoryIndex,
-                  model: const [],
-                );
+                return const Center(
+                    child: CircularProgressIndicator(
+                  color: AppColors.primary,
+                ));
               }
               if (state is ProductsLoaded) {
-                return CategoriesAppBar(
-                  appBarItemScrollController: itemAppbarScrollController,
-                  menuItemScrollController: itemMenuScrollController,
-                  selectedCategoryIndex: selectedCategoryIndex,
-                  model: state.categories,
+                return ScrollablePositionedList.builder(
+                  itemPositionsListener: itemPositionsListener,
+                  itemScrollController: itemMenuScrollController,
+                  itemCount: state.categories.length,
+                  itemBuilder: (context, index) {
+                    return ProdustGrid(model: state.categories[index]);
+                  },
                 );
               }
               return const Center(
@@ -102,36 +138,6 @@ class _MenuScreenState extends State<MenuScreen> {
               ));
             },
           ),
-        ),
-      ),
-      backgroundColor: AppColors.background,
-      floatingActionButton: const CartButton(),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: BlocBuilder<ProductsBloc, ProductsState>(
-          bloc: _productsBloc,
-          builder: (context, state) {
-            if (state is ProductsLoading) {
-              return const Center(
-                  child: CircularProgressIndicator(
-                color: AppColors.primary,
-              ));
-            }
-            if (state is ProductsLoaded) {
-              return ScrollablePositionedList.builder(
-                itemPositionsListener: itemPositionsListener,
-                itemScrollController: itemMenuScrollController,
-                itemCount: state.categories.length,
-                itemBuilder: (context, index) {
-                  return ProdustGrid(model: state.categories[index]);
-                },
-              );
-            }
-            return const Center(
-                child: CircularProgressIndicator(
-              color: AppColors.white,
-            ));
-          },
         ),
       ),
     );

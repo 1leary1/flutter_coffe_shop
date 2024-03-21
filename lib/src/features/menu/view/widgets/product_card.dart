@@ -1,8 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:coffe_shop/src/features/menu/modeles/product_model.dart';
+import 'package:coffe_shop/src/features/order/bloc/order_bloc.dart';
 import 'package:coffe_shop/src/theme/app_colors.dart';
 import 'package:coffe_shop/src/theme/image_sources.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 
 class ProductCard extends StatefulWidget {
   final ProductModel? model;
@@ -13,18 +16,25 @@ class ProductCard extends StatefulWidget {
 }
 
 class _ProductCardState extends State<ProductCard> {
+  final _orderBloc = OrderBloc(GetIt.I<List<ProductModel>>());
   int _count = 0;
 
   _incrementCouner() {
-    setState(() {
-      if (_count < 10) _count++;
-    });
+    if (_count < 10) {
+      context.read<OrderBloc>().add(OrderAddItemEvent(model: widget.model!));
+      setState(() {
+        _count++;
+      });
+    }
   }
 
   _decrementCouner() {
-    setState(() {
-      if (_count > 0) _count--;
-    });
+    if (_count > 0) {
+      context.read<OrderBloc>().add(OrderRemoveItemEvent(model: widget.model!));
+      setState(() {
+        _count--;
+      });
+    }
   }
 
   Widget _priceOrCount() {

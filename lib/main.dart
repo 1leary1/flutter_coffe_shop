@@ -1,4 +1,5 @@
 import 'package:coffe_shop/src/features/menu/modeles/category_model.dart';
+import 'package:coffe_shop/src/features/menu/modeles/product_model.dart';
 import 'package:coffe_shop/src/features/menu/view/menu_screen.dart';
 import 'package:coffe_shop/src/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -23,4 +24,5 @@ class CoffeShop extends StatelessWidget {
 
 void _initGetIt() {
   GetIt.I.registerLazySingleton<List<CategoryModel>>(() => []);
+  GetIt.I.registerLazySingleton<List<ProductModel>>(() => []);
 }

@@ -36,6 +36,7 @@ class ModelAdapter {
 
   static ProductModel adaptProduct(ProductApiModel productApiModel) {
     return ProductModel(
+      id: productApiModel.id,
       imageUrl: productApiModel.imageUrl,
       name: productApiModel.name,
       price: productApiModel.prices[0].value,

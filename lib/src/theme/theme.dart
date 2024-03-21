@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 
 final theme = ThemeData(
   canvasColor: Colors.transparent,
-  bottomSheetTheme: const BottomSheetThemeData(backgroundColor: Colors.white),
+  bottomSheetTheme: const BottomSheetThemeData(
+    backgroundColor: Colors.white,
+    surfaceTintColor: Colors.white,
+    modalBackgroundColor: AppColors.white,
+  ),
   textTheme: const TextTheme(
     displayMedium: TextStyle(
       color: AppColors.black,
