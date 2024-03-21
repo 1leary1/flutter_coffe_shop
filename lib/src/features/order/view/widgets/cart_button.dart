@@ -33,7 +33,7 @@ class _CartButtonState extends State<CartButton> {
       width: 99,
       child: FloatingActionButton.extended(
         onPressed: () => _show(context),
-        icon: Icon(Icons.shopping_basket_outlined),
+        icon: const Icon(Icons.shopping_basket_outlined),
         label: Text(
           '139 ₽',
           style: Theme.of(context).textTheme.headlineMedium,

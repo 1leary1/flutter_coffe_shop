@@ -3,7 +3,7 @@ class ProductModel {
   final String name;
   final String price;
 
-  ProductModel({
+  const ProductModel({
     required this.imageUrl,
     required this.name,
     required this.price,

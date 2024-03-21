@@ -4,7 +4,7 @@ class CategoryModel {
   final String title;
   final List<ProductModel> productsList;
 
-  CategoryModel({
+  const CategoryModel({
     required this.title,
     required this.productsList,
   });

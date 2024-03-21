@@ -6,7 +6,7 @@ class ProductApiModel {
   final String imageUrl;
   final List<Price> prices;
 
-  ProductApiModel({
+  const ProductApiModel({
     required this.id,
     required this.name,
     required this.description,

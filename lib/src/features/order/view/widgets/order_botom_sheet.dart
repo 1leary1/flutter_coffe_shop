@@ -1,7 +1,6 @@
 import 'package:coffe_shop/src/common/network/models/product_api_model.dart';
 import 'package:coffe_shop/src/features/order/view/widgets/order_item.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class OrderBottomSheet extends StatelessWidget {
@@ -32,7 +31,7 @@ class OrderBottomSheet extends StatelessWidget {
           Expanded(
             child: ScrollablePositionedList.builder(
               itemCount: 3,
-              itemBuilder: (context, index) => OrderItem(),
+              itemBuilder: (context, index) => const OrderItem(),
             ),
           ),
         ],
