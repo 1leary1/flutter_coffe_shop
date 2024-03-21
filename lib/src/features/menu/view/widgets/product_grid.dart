@@ -32,7 +32,9 @@ class ProdustGrid extends StatelessWidget {
           ),
           itemCount: model.productsList.length,
           itemBuilder: (context, index) {
-            return ProductCard(model: model.productsList[index]);
+            return ProductCard(
+              model: model.productsList[index],
+            );
           },
         ),
       ],

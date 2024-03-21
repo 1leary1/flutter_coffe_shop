@@ -18,3 +18,5 @@ class OrderRemoveItemEvent extends OrderEvent {
 
   final ProductModel model;
 }
+
+class OrderRemoveAllItemsEvent extends OrderEvent {}

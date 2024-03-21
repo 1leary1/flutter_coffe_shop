@@ -5,18 +5,19 @@ import 'package:coffe_shop/src/theme/app_colors.dart';
 import 'package:coffe_shop/src/theme/image_sources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 
 class ProductCard extends StatefulWidget {
   final ProductModel? model;
-  const ProductCard({super.key, required this.model});
+  const ProductCard({
+    super.key,
+    required this.model,
+  });
 
   @override
   State<ProductCard> createState() => _ProductCardState();
 }
 
 class _ProductCardState extends State<ProductCard> {
-  final _orderBloc = OrderBloc(GetIt.I<List<ProductModel>>());
   int _count = 0;
 
   _incrementCouner() {

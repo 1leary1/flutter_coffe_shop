@@ -1,13 +1,10 @@
 import 'package:coffe_shop/src/common/network/api_request.dart';
-import 'package:coffe_shop/src/common/network/models/product_api_model.dart';
-import 'package:coffe_shop/src/features/menu/modeles/product_model.dart';
 import 'package:coffe_shop/src/features/order/bloc/order_bloc.dart';
 import 'package:coffe_shop/src/features/order/view/widgets/order_item.dart';
 import 'package:coffe_shop/src/theme/app_colors.dart';
+import 'package:coffe_shop/src/theme/image_sources.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class OrderBottomSheet extends StatefulWidget {
@@ -25,8 +22,6 @@ class OrderBottomSheet extends StatefulWidget {
 }
 
 class _OrderBottomSheetState extends State<OrderBottomSheet> {
-  final _orderBloc = OrderBloc(GetIt.I<List<ProductModel>>());
-
   @override
   void initState() {
     super.initState();
@@ -45,10 +40,15 @@ class _OrderBottomSheetState extends State<OrderBottomSheet> {
                 'Ваш заказ',
                 style: Theme.of(context).textTheme.titleLarge,
               ),
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.thumbs_up_down),
-              ),
+              TextButton(
+                  onPressed: () => widget.context
+                      .read<OrderBloc>()
+                      .add(OrderRemoveAllItemsEvent()),
+                  child: Image.asset(
+                    ImageSources.bin,
+                    width: 20,
+                    height: 20,
+                  ))
             ],
           ),
           const Divider(),
@@ -56,7 +56,6 @@ class _OrderBottomSheetState extends State<OrderBottomSheet> {
             bloc: widget.context.read<OrderBloc>(),
             builder: (context, state) {
               if (state is OrderBaseState) {
-                print(state.toString());
                 return Expanded(
                   child: ScrollablePositionedList.builder(
                     itemCount: state.products.length,
@@ -66,7 +65,6 @@ class _OrderBottomSheetState extends State<OrderBottomSheet> {
                   ),
                 );
               } else {
-                print(state.toString());
                 return const Column(
                   children: [
                     SizedBox(
@@ -84,19 +82,13 @@ class _OrderBottomSheetState extends State<OrderBottomSheet> {
               }
             },
           ),
-          //Expanded(
-          //  child: ScrollablePositionedList.builder(
-          //    itemCount: 3,
-          //    itemBuilder: (context, index) => const OrderItem(),
-          //  ),
-          //),
           TextButton(
             onPressed: () {
               Navigator.pop(widget.ctx);
               ApiRequest.postOrder(context);
             },
             style: TextButton.styleFrom(
-              minimumSize: Size(500, 56),
+              minimumSize: const Size(500, 56),
               backgroundColor: AppColors.primary,
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(

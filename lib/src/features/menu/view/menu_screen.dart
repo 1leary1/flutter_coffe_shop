@@ -103,9 +103,13 @@ class _MenuScreenState extends State<MenuScreen> {
                   0,
                   (double sum, ProductModel product) =>
                       sum + double.parse(product.price));
-              return CartButton(
-                context: context,
-                totalPrice: totalSum.toInt(),
+
+              return Visibility(
+                visible: totalSum == 0 ? false : true,
+                child: CartButton(
+                  context: context,
+                  totalPrice: totalSum.toInt(),
+                ),
               );
             }
             return Container();
