@@ -41,9 +41,12 @@ class _OrderBottomSheetState extends State<OrderBottomSheet> {
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               TextButton(
-                  onPressed: () => widget.context
-                      .read<OrderBloc>()
-                      .add(OrderRemoveAllItemsEvent()),
+                  onPressed: () {
+                    Navigator.pop(widget.ctx);
+                    widget.context
+                        .read<OrderBloc>()
+                        .add(OrderRemoveAllItemsEvent());
+                  },
                   child: Image.asset(
                     ImageSources.bin,
                     width: 20,
@@ -85,7 +88,7 @@ class _OrderBottomSheetState extends State<OrderBottomSheet> {
           TextButton(
             onPressed: () {
               Navigator.pop(widget.ctx);
-              ApiRequest.postOrder(context);
+              ApiRequest.postOrder(widget.context);
             },
             style: TextButton.styleFrom(
               minimumSize: const Size(500, 56),

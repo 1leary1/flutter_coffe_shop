@@ -12,3 +12,5 @@ final class OrderBaseState extends OrderState {
 
   final List<ProductModel> products;
 }
+
+final class OrderAcceptedState extends OrderState {}

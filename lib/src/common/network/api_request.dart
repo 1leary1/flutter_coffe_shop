@@ -2,7 +2,9 @@ import 'dart:convert';
 
 import 'package:coffe_shop/src/common/network/models/category_api_model.dart';
 import 'package:coffe_shop/src/common/network/models/product_api_model.dart';
+import 'package:coffe_shop/src/features/menu/modeles/product_model.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 
 class ApiRequest {
@@ -37,22 +39,42 @@ class ApiRequest {
   }
 
   static Future<void> postOrder(BuildContext context) async {
+    final products = GetIt.I<List<ProductModel>>();
+    Map<String, int> orderProducts = products.fold<Map<String, int>>(
+      {},
+      (Map<String, int> previousValue, ProductModel product) {
+        previousValue.update(product.id.toString(), (value) => value + 1,
+            ifAbsent: () => 1);
+        return previousValue;
+      },
+    );
+    final Map<String, dynamic> order = {
+      "positions": orderProducts,
+      "token": ""
+    };
     final response = await http.post(
-        Uri.parse('https://coffeeshop.academy.effective.band/api/v1/orders'));
-    if (response.statusCode == 307) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Заказ создан'),
-          duration: Duration(seconds: 2),
-        ),
-      );
+      Uri.parse('https://coffeeshop.academy.effective.band/api/v1/orders'),
+      body: json.encode(order),
+      headers: {'Content-Type': 'application/json'},
+    );
+    if (response.statusCode == 201) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Заказ создан'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Возникла ошибка при заказе'),
-          duration: Duration(seconds: 2),
-        ),
-      );
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Возникла ошибка при заказе'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
     }
   }
 }

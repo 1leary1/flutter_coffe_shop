@@ -2,12 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:coffe_shop/src/features/menu/modeles/product_model.dart';
 import 'package:coffe_shop/src/features/order/bloc/order_bloc.dart';
 import 'package:coffe_shop/src/theme/app_colors.dart';
-import 'package:coffe_shop/src/theme/image_sources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProductCard extends StatefulWidget {
-  final ProductModel? model;
+  final ProductModel model;
   const ProductCard({
     super.key,
     required this.model,
@@ -22,7 +21,7 @@ class _ProductCardState extends State<ProductCard> {
 
   _incrementCouner() {
     if (_count < 10) {
-      context.read<OrderBloc>().add(OrderAddItemEvent(model: widget.model!));
+      context.read<OrderBloc>().add(OrderAddItemEvent(model: widget.model));
       setState(() {
         _count++;
       });
@@ -31,7 +30,7 @@ class _ProductCardState extends State<ProductCard> {
 
   _decrementCouner() {
     if (_count > 0) {
-      context.read<OrderBloc>().add(OrderRemoveItemEvent(model: widget.model!));
+      context.read<OrderBloc>().add(OrderRemoveItemEvent(model: widget.model));
       setState(() {
         _count--;
       });
@@ -103,7 +102,7 @@ class _ProductCardState extends State<ProductCard> {
           ),
           child: Center(
             child: Text(
-              '${widget.model?.price.toString() ?? 'loading'} руб.',
+              "${widget.model.price} ₽",
               style: Theme.of(context).textTheme.displaySmall,
             ),
           ),
@@ -127,7 +126,7 @@ class _ProductCardState extends State<ProductCard> {
           children: [
             CachedNetworkImage(
               height: 100,
-              imageUrl: widget.model?.imageUrl ?? ImageSources.nullDrink,
+              imageUrl: widget.model.imageUrl,
               progressIndicatorBuilder: (context, url, downloadProgress) =>
                   Center(
                 child: SizedBox(
@@ -142,10 +141,19 @@ class _ProductCardState extends State<ProductCard> {
               errorWidget: (context, url, error) => const Icon(Icons.error),
             ),
             Text(
-              widget.model?.name ?? 'Drink',
+              widget.model.name,
               style: Theme.of(context).textTheme.displayMedium,
             ),
-            _priceOrCount(),
+            BlocListener<OrderBloc, OrderState>(
+              listener: (context, state) {
+                if (state is OrderAcceptedState) {
+                  setState(() {
+                    _count = 0;
+                  });
+                }
+              },
+              child: _priceOrCount(),
+            ),
           ],
         ),
       ),
