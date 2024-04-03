@@ -87,8 +87,9 @@ class _OrderBottomSheetState extends State<OrderBottomSheet> {
           ),
           TextButton(
             onPressed: () {
-              Navigator.pop(widget.ctx);
+              Navigator.pop(context);
               ApiRequest.postOrder(widget.context);
+              widget.context.read<OrderBloc>().add(OrderRemoveAllItemsEvent());
             },
             style: TextButton.styleFrom(
               minimumSize: const Size(500, 56),

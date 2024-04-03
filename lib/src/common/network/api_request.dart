@@ -8,9 +8,12 @@ import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 
 class ApiRequest {
+  static const String baseUrl =
+      "https://coffeeshop.academy.effective.band/api/";
+
   static Future<List<ProductApiModel>> getProductByCategory(categoryId) async {
     final response = await http.get(Uri.parse(
-        'https://coffeeshop.academy.effective.band/api/v1/products?page=0&limit=10&category=$categoryId'));
+        '${baseUrl}v1/products?page=0&limit=10&category=$categoryId'));
 
     if (response.statusCode == 200) {
       final List<ProductApiModel> products = [];
@@ -24,8 +27,8 @@ class ApiRequest {
   }
 
   static Future<List<CategoryApiModel>> getCategories() async {
-    final response = await http.get(Uri.parse(
-        'https://coffeeshop.academy.effective.band/api/v1/products/categories'));
+    final response =
+        await http.get(Uri.parse('${baseUrl}v1/products/categories'));
 
     if (response.statusCode == 200) {
       final List<CategoryApiModel> categories = [];
@@ -59,6 +62,7 @@ class ApiRequest {
     );
     if (response.statusCode == 201) {
       if (context.mounted) {
+        print('кулл');
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Заказ создан'),
@@ -68,6 +72,7 @@ class ApiRequest {
       }
     } else {
       if (context.mounted) {
+        print('кулл2');
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Возникла ошибка при заказе'),

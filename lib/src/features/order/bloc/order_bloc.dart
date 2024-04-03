@@ -9,7 +9,6 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
   OrderBloc(this.products) : super(OrderInitial()) {
     on<OrderAddItemEvent>((event, emit) {
       products.add(event.model);
-      debugPrint(products.toString());
       emit(OrderBaseState(products: products));
     });
 

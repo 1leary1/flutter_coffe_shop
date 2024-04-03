@@ -28,30 +28,33 @@ class _MenuScreenState extends State<MenuScreen> {
   final itemMenuScrollController = ItemScrollController();
   final itemAppbarScrollController = ItemScrollController();
   final itemPositionsListener = ItemPositionsListener.create();
+  late bool isScrollAble = true;
   late int selectedCategoryIndex;
 
   @override
   void initState() {
     _productsBloc.add(ProductsLoadingEvent());
-    super.initState();
     itemPositionsListener.itemPositions.addListener(_onChageVisibility);
     selectedCategoryIndex = 0;
+    super.initState();
   }
 
   void _onChageVisibility() {
-    final indices = itemPositionsListener.itemPositions.value
-        .map((item) => item.index)
-        .toList();
-    if (indices.isEmpty) return;
-    if (selectedCategoryIndex != indices[0]) {
-      setState(() {
-        selectedCategoryIndex = indices[0];
-      });
-      itemAppbarScrollController.scrollTo(
-        index: selectedCategoryIndex,
-        alignment: 0.1,
-        duration: const Duration(milliseconds: 450),
-      );
+    if (isScrollAble) {
+      final indices = itemPositionsListener.itemPositions.value
+          .map((item) => item.index)
+          .toList();
+      if (indices.isEmpty) return;
+      if (selectedCategoryIndex != indices[0]) {
+        setState(() {
+          selectedCategoryIndex = indices[0];
+        });
+        itemAppbarScrollController.scrollTo(
+          index: selectedCategoryIndex,
+          alignment: 0.1,
+          duration: const Duration(milliseconds: 450),
+        );
+      }
     }
   }
 
@@ -70,16 +73,16 @@ class _MenuScreenState extends State<MenuScreen> {
               builder: (context, state) {
                 if (state is ProductsLoading) {
                   return CategoriesAppBar(
+                    isScrollAble: isScrollAble,
                     appBarItemScrollController: itemAppbarScrollController,
                     menuItemScrollController: itemMenuScrollController,
                     selectedCategoryIndex: selectedCategoryIndex,
-                    model: const [
-                      CategoryModel(title: "Загрузка...", productsList: [])
-                    ],
+                    model: const [],
                   );
                 }
                 if (state is ProductsLoaded) {
                   return CategoriesAppBar(
+                    isScrollAble: isScrollAble,
                     appBarItemScrollController: itemAppbarScrollController,
                     menuItemScrollController: itemMenuScrollController,
                     selectedCategoryIndex: selectedCategoryIndex,

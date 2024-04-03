@@ -9,7 +9,7 @@ part 'products_event.dart';
 part 'products_state.dart';
 
 class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
-  ProductsBloc(this.categories) : super(ProductsInitial()) {
+  ProductsBloc(this.categories) : super(ProductsLoading()) {
     on<ProductsLoadingEvent>((event, emit) async {
       emit(ProductsLoading());
       List<CategoryApiModel> apiCategories = await ApiRequest.getCategories();
