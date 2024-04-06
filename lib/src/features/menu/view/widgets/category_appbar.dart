@@ -1,36 +1,55 @@
 import 'package:coffe_shop/src/features/menu/modeles/category_model.dart';
-import 'package:coffe_shop/src/features/menu/services/scroll_services.dart';
 import 'package:coffe_shop/src/features/menu/view/widgets/category_appbar_item.dart';
 import 'package:flutter/material.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
-class Categories extends StatefulWidget {
+class CategoriesAppBar extends StatefulWidget {
   final List<CategoryModel?> model;
+  final ItemScrollController menuItemScrollController;
+  final ItemScrollController appBarItemScrollController;
   late int selectedCategoryIndex;
+  late bool isScrollAble;
 
-  Categories(
-      {super.key, required this.model, required this.selectedCategoryIndex});
+  CategoriesAppBar({
+    super.key,
+    required this.model,
+    required this.selectedCategoryIndex,
+    required this.menuItemScrollController,
+    required this.appBarItemScrollController,
+    required this.isScrollAble,
+  });
 
   @override
-  State<Categories> createState() => _CategoriesState();
+  State<CategoriesAppBar> createState() => _CategoriesAppBarState();
 }
 
-class _CategoriesState extends State<Categories> {
+class _CategoriesAppBarState extends State<CategoriesAppBar> {
   _onTap(int index) {
     setState(() {
+      widget.isScrollAble = false;
       widget.selectedCategoryIndex = index;
-      ScrollServices.scrollToItem(widget.model[index]!.verticalKey);
-      ScrollServices.scrollToItem(widget.model[index]!.horizonalKey);
+      widget.menuItemScrollController.scrollTo(
+        index: index,
+        alignment: 0.0,
+        duration: const Duration(milliseconds: 450),
+      );
+
+      widget.appBarItemScrollController.scrollTo(
+        index: index,
+        alignment: 0.1,
+        duration: const Duration(milliseconds: 450),
+      );
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
+    return ScrollablePositionedList.builder(
       scrollDirection: Axis.horizontal,
+      itemScrollController: widget.appBarItemScrollController,
       itemCount: widget.model.length,
       itemBuilder: ((context, index) {
         return CategoryAppbarItem(
-          horizontalKey: widget.model[index]!.horizonalKey,
           model: widget.model[index],
           selectedIndex: widget.selectedCategoryIndex,
           currentIndex: index,

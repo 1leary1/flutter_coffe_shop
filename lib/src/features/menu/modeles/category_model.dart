@@ -1,17 +1,11 @@
-import 'package:flutter/material.dart';
-
-import 'drink_model.dart';
+import 'product_model.dart';
 
 class CategoryModel {
-  final GlobalKey horizonalKey;
-  final GlobalKey verticalKey;
   final String title;
-  final List<DrinkModel> drinksList;
+  final List<ProductModel> productsList;
 
-  CategoryModel({
-    required this.horizonalKey,
-    required this.verticalKey,
+  const CategoryModel({
     required this.title,
-    required this.drinksList,
+    required this.productsList,
   });
 }
