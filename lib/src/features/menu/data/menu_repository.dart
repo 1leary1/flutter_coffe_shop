@@ -28,11 +28,11 @@ final class MenuRepository implements IMenuRepository {
     var dtos = <MenuProductDto>[];
     try {
       dtos = await _networkMenuDataSource.fetchMenuItems(
-          categoryId: '1', page: page, limit: limit);
+          categoryId: category.id, page: page, limit: limit);
       _dbMenuDataSource.saveMenuItems(menuItems: dtos);
     } on SocketException {
       dtos = await _dbMenuDataSource.fetchMenuItems(
-          categoryId: '1', page: page, limit: limit);
+          categoryId: category.id, page: page, limit: limit);
     }
     return dtos.map((e) => e.toModel()).toList();
   }

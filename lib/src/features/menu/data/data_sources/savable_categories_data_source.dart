@@ -1,4 +1,5 @@
 import 'package:coffe_shop/src/features/menu/data/data_sources/categories_data_source.dart';
+import 'package:coffe_shop/src/features/menu/data/database/database.dart';
 import 'package:coffe_shop/src/features/menu/modeles/dto/menu_category_dto.dart';
 
 abstract interface class ISavableCategoriesDataSource
@@ -7,21 +8,27 @@ abstract interface class ISavableCategoriesDataSource
 }
 
 final class DbCategoriesDataSource implements ISavableCategoriesDataSource {
-  // Put dependency of network class such as dio or http, e.g.
-  // final IMenuDb _menuDb;
+  final AppDatabase _menuDb;
 
-  const DbCategoriesDataSource(
-      /*{required IMenuDb menuDb}*/) /* : _menuDb = menuDb*/;
+  const DbCategoriesDataSource({required AppDatabase menuDb})
+      : _menuDb = menuDb;
 
   @override
-  Future<List<MenuCategoryDto>> fetchCategories() {
-    // TODO: implement fetchCategories
-    throw UnimplementedError();
+  Future<List<MenuCategoryDto>> fetchCategories() async {
+    List<Category> items = await _menuDb.select(_menuDb.categories).get();
+
+    return items.map((e) => MenuCategoryDto.fromDb(e)).toList();
   }
 
   @override
-  Future<void> saveCategories({required List<MenuCategoryDto> categories}) {
-    // TODO: implement saveCategories
-    throw UnimplementedError();
+  Future<void> saveCategories(
+      {required List<MenuCategoryDto> categories}) async {
+    await _menuDb.delete(_menuDb.categories).go();
+    for (var category in categories) {
+      await _menuDb.into(_menuDb.categories).insert(CategoriesCompanion.insert(
+            id: category.id,
+            title: category.slug,
+          ));
+    }
   }
 }

@@ -1,5 +1,7 @@
 import 'package:coffe_shop/src/features/menu/modeles/category_model.dart';
 
+import '../../data/database/database.dart';
+
 class MenuCategoryDto {
   final int id;
   final String slug;
@@ -8,6 +10,13 @@ class MenuCategoryDto {
     required this.id,
     required this.slug,
   });
+
+  static MenuCategoryDto fromDb(Category category) {
+    return MenuCategoryDto(
+      id: category.id,
+      slug: category.title,
+    );
+  }
 
   factory MenuCategoryDto.fromJson(Map<String, dynamic> json) {
     return MenuCategoryDto(
@@ -23,6 +32,7 @@ class MenuCategoryDto {
 
   CategoryModel toModel() {
     return CategoryModel(
+      id: id.toString(),
       title: slug,
       productsList: [],
     );

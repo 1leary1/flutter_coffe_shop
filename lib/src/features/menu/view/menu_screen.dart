@@ -4,9 +4,8 @@ import 'package:coffe_shop/src/features/menu/data/data_sources/categories_data_s
 import 'package:coffe_shop/src/features/menu/data/data_sources/menu_data_source.dart';
 import 'package:coffe_shop/src/features/menu/data/data_sources/savable_categories_data_source.dart';
 import 'package:coffe_shop/src/features/menu/data/data_sources/savable_menu_data_source.dart';
+import 'package:coffe_shop/src/features/menu/data/database/database.dart';
 import 'package:coffe_shop/src/features/menu/data/menu_repository.dart';
-import 'package:coffe_shop/src/features/menu/modeles/category_model.dart';
-import 'package:coffe_shop/src/features/menu/modeles/dto/menu_product_dto.dart';
 import 'package:coffe_shop/src/features/menu/modeles/product_model.dart';
 import 'package:coffe_shop/src/features/menu/view/widgets/category_appbar.dart';
 import 'package:coffe_shop/src/features/menu/view/widgets/product_grid.dart';
@@ -30,6 +29,7 @@ class _MenuScreenState extends State<MenuScreen> {
   late CategoriesRepository _categoryRepository;
   late MenuRepository _menuRepository;
   late MenuBloc _menuBloc;
+  late AppDatabase _menuDb;
   final _orderBloc = OrderBloc(GetIt.I<List<ProductModel>>());
   final itemMenuScrollController = ItemScrollController();
   final itemAppbarScrollController = ItemScrollController();
@@ -38,18 +38,18 @@ class _MenuScreenState extends State<MenuScreen> {
 
   @override
   void initState() {
+    _menuDb = AppDatabase();
     _categoryRepository = CategoriesRepository(
         networkCategoriesDataSource:
             NetworkCategoriesDataSource(client: http.Client()),
-        dbCategoriesDataSource: DbCategoriesDataSource());
+        dbCategoriesDataSource: DbCategoriesDataSource(menuDb: _menuDb));
     _menuRepository = MenuRepository(
         networkMenuDataSource: NetworkMenuDataSource(client: http.Client()),
-        dbMenuDataSource: DbMenuDataSource());
+        dbMenuDataSource: DbMenuDataSource(menuDb: _menuDb));
     _menuBloc = MenuBloc(
         menuRepository: _menuRepository,
         categoryRepository: _categoryRepository);
     _menuBloc.add(const LoadCategoriesEvent());
-    _menuBloc.add(const LoadPageEvent());
 
     itemPositionsListener.itemPositions.addListener(_onChageVisibility);
     selectedCategoryIndex = 0;
@@ -93,7 +93,6 @@ class _MenuScreenState extends State<MenuScreen> {
             child: BlocBuilder<MenuBloc, MenuState>(
               bloc: _menuBloc,
               builder: (context, state) {
-                print(state.toString());
                 if (state is ProgressMenuState) {
                   return CategoriesAppBar(
                     appBarItemScrollController: itemAppbarScrollController,
@@ -160,10 +159,7 @@ class _MenuScreenState extends State<MenuScreen> {
                   },
                 );
               }
-              return const Center(
-                  child: CircularProgressIndicator(
-                color: AppColors.white,
-              ));
+              return const SizedBox();
             },
           ),
         ),

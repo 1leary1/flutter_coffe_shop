@@ -1,10 +1,11 @@
+import 'package:coffe_shop/src/features/menu/data/database/database.dart';
 import 'package:coffe_shop/src/features/menu/modeles/product_model.dart';
 
 class MenuProductDto {
   final int id;
   final String name;
   final String description;
-  final Category category;
+  final CategoryInnerDto category;
   final String imageUrl;
   final List<Price> prices;
 
@@ -21,7 +22,7 @@ class MenuProductDto {
         id: json["id"],
         name: json["name"],
         description: json["description"],
-        category: Category.fromJson(json["category"]),
+        category: CategoryInnerDto.fromJson(json["category"]),
         imageUrl: json["imageUrl"],
         prices: List<Price>.from(json["prices"].map((x) => Price.fromJson(x))),
       );
@@ -43,18 +44,40 @@ class MenuProductDto {
       price: prices[0].value,
     );
   }
+
+  static MenuProductDto fromDb(Product product) {
+    return MenuProductDto(
+      id: product.id,
+      name: product.name,
+      description: '',
+      category: CategoryInnerDto(id: product.categoryId, slug: ''),
+      imageUrl: product.imageUrl,
+      prices: [Price(value: product.price, currency: 'RUB')],
+    );
+  }
+
+  Product toDb() {
+    return Product(
+      id: id,
+      categoryId: category.id,
+      imageUrl: imageUrl,
+      name: name,
+      price: prices[0].value,
+    );
+  }
 }
 
-class Category {
+class CategoryInnerDto {
   final int id;
   final String slug;
 
-  Category({
+  CategoryInnerDto({
     required this.id,
     required this.slug,
   });
 
-  factory Category.fromJson(Map<String, dynamic> json) => Category(
+  factory CategoryInnerDto.fromJson(Map<String, dynamic> json) =>
+      CategoryInnerDto(
         id: json["id"],
         slug: json["slug"],
       );

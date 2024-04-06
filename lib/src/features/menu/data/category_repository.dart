@@ -24,7 +24,7 @@ final class CategoriesRepository implements ICategoryRepository {
     var dtos = <MenuCategoryDto>[];
     try {
       dtos = await _networkCategoriesDataSource.fetchCategories();
-      //_dbCategoriesDataSource.saveCategories(categories: dtos);
+      _dbCategoriesDataSource.saveCategories(categories: dtos);
     } on SocketException {
       dtos = await _dbCategoriesDataSource.fetchCategories();
     }

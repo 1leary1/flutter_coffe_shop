@@ -18,7 +18,7 @@ final class MenuBloc extends Bloc<MenuEvent, MenuState> {
     required ICategoryRepository categoryRepository,
   })  : _menuRepository = menuRepository,
         _categoryRepository = categoryRepository,
-        super(const IdleMenuState()) {
+        super(const ProgressMenuState()) {
     on<MenuEvent>((event, emit) async {
       switch (event) {
         case LoadCategoriesEvent():
@@ -37,7 +37,12 @@ final class MenuBloc extends Bloc<MenuEvent, MenuState> {
     emit(ProgressMenuState(items: state.items));
     try {
       final categories = await _categoryRepository.loadCategories();
-      Future.delayed(Duration.zero);
+      for (var category in categories) {
+        List<ProductModel> items =
+            await _menuRepository.loadMenuItems(category: category);
+        category.productsList.addAll(items);
+      }
+
       emit(SuccessfulMenuState(categories: categories, items: List.empty()));
     } on Object {
       emit(ErrorMenuState(categories: state.categories, items: state.items));
@@ -62,6 +67,7 @@ final class MenuBloc extends Bloc<MenuEvent, MenuState> {
       if (items.length < _pageLimit) {
         // Обновить счетчик страниц и выбрать следующую категорию
       }
+
       emit(SuccessfulMenuState(categories: state.categories, items: items));
     } on Object {
       emit(ErrorMenuState(categories: state.categories, items: state.items));
