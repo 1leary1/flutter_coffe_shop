@@ -8,7 +8,6 @@ class CategoriesAppBar extends StatefulWidget {
   final ItemScrollController menuItemScrollController;
   final ItemScrollController appBarItemScrollController;
   late int selectedCategoryIndex;
-  late bool isScrollAble;
 
   CategoriesAppBar({
     super.key,
@@ -16,7 +15,6 @@ class CategoriesAppBar extends StatefulWidget {
     required this.selectedCategoryIndex,
     required this.menuItemScrollController,
     required this.appBarItemScrollController,
-    required this.isScrollAble,
   });
 
   @override
@@ -26,7 +24,6 @@ class CategoriesAppBar extends StatefulWidget {
 class _CategoriesAppBarState extends State<CategoriesAppBar> {
   _onTap(int index) {
     setState(() {
-      widget.isScrollAble = false;
       widget.selectedCategoryIndex = index;
       widget.menuItemScrollController.scrollTo(
         index: index,

@@ -1,12 +1,15 @@
-class ProductApiModel {
+import 'package:coffe_shop/src/features/menu/data/database/database.dart';
+import 'package:coffe_shop/src/features/menu/modeles/product_model.dart';
+
+class MenuProductDto {
   final int id;
   final String name;
   final String description;
-  final Category category;
+  final CategoryInnerDto category;
   final String imageUrl;
   final List<Price> prices;
 
-  const ProductApiModel({
+  const MenuProductDto({
     required this.id,
     required this.name,
     required this.description,
@@ -15,12 +18,11 @@ class ProductApiModel {
     required this.prices,
   });
 
-  factory ProductApiModel.fromJson(Map<String, dynamic> json) =>
-      ProductApiModel(
+  factory MenuProductDto.fromJson(Map<String, dynamic> json) => MenuProductDto(
         id: json["id"],
         name: json["name"],
         description: json["description"],
-        category: Category.fromJson(json["category"]),
+        category: CategoryInnerDto.fromJson(json["category"]),
         imageUrl: json["imageUrl"],
         prices: List<Price>.from(json["prices"].map((x) => Price.fromJson(x))),
       );
@@ -33,18 +35,49 @@ class ProductApiModel {
         "imageUrl": imageUrl,
         "prices": List<dynamic>.from(prices.map((x) => x.toJson())),
       };
+
+  ProductModel toModel() {
+    return ProductModel(
+      id: id,
+      imageUrl: imageUrl,
+      name: name,
+      price: prices[0].value,
+    );
+  }
+
+  static MenuProductDto fromDb(Product product) {
+    return MenuProductDto(
+      id: product.id,
+      name: product.name,
+      description: '',
+      category: CategoryInnerDto(id: product.categoryId, slug: ''),
+      imageUrl: product.imageUrl,
+      prices: [Price(value: product.price, currency: 'RUB')],
+    );
+  }
+
+  Product toDb() {
+    return Product(
+      id: id,
+      categoryId: category.id,
+      imageUrl: imageUrl,
+      name: name,
+      price: prices[0].value,
+    );
+  }
 }
 
-class Category {
+class CategoryInnerDto {
   final int id;
   final String slug;
 
-  Category({
+  CategoryInnerDto({
     required this.id,
     required this.slug,
   });
 
-  factory Category.fromJson(Map<String, dynamic> json) => Category(
+  factory CategoryInnerDto.fromJson(Map<String, dynamic> json) =>
+      CategoryInnerDto(
         id: json["id"],
         slug: json["slug"],
       );

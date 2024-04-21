@@ -1,4 +1,3 @@
-import 'package:coffe_shop/src/common/network/api_request.dart';
 import 'package:coffe_shop/src/features/order/bloc/order_bloc.dart';
 import 'package:coffe_shop/src/features/order/view/widgets/order_item.dart';
 import 'package:coffe_shop/src/theme/app_colors.dart';
@@ -88,7 +87,8 @@ class _OrderBottomSheetState extends State<OrderBottomSheet> {
           TextButton(
             onPressed: () {
               Navigator.pop(context);
-              ApiRequest.postOrder(widget.context);
+              //TODO: post order
+              //ApiRequest.postOrder(widget.context);
               widget.context.read<OrderBloc>().add(OrderRemoveAllItemsEvent());
             },
             style: TextButton.styleFrom(

@@ -1,5 +1,11 @@
-import 'package:coffe_shop/src/features/menu/bloc/products/products_bloc.dart';
-import 'package:coffe_shop/src/features/menu/modeles/category_model.dart';
+import 'package:coffe_shop/src/features/menu/bloc/menu_bloc.dart';
+import 'package:coffe_shop/src/features/menu/data/category_repository.dart';
+import 'package:coffe_shop/src/features/menu/data/data_sources/categories_data_source.dart';
+import 'package:coffe_shop/src/features/menu/data/data_sources/menu_data_source.dart';
+import 'package:coffe_shop/src/features/menu/data/data_sources/savable_categories_data_source.dart';
+import 'package:coffe_shop/src/features/menu/data/data_sources/savable_menu_data_source.dart';
+import 'package:coffe_shop/src/features/menu/data/database/database.dart';
+import 'package:coffe_shop/src/features/menu/data/menu_repository.dart';
 import 'package:coffe_shop/src/features/menu/modeles/product_model.dart';
 import 'package:coffe_shop/src/features/menu/view/widgets/category_appbar.dart';
 import 'package:coffe_shop/src/features/menu/view/widgets/product_grid.dart';
@@ -9,6 +15,7 @@ import 'package:coffe_shop/src/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:http/http.dart' as http;
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class MenuScreen extends StatefulWidget {
@@ -19,74 +26,87 @@ class MenuScreen extends StatefulWidget {
 }
 
 class _MenuScreenState extends State<MenuScreen> {
-  final List<CategoryModel> loadingData = [
-    const CategoryModel(title: 'Загрузка...', productsList: []),
-  ];
-
-  final _productsBloc = ProductsBloc(GetIt.I<List<CategoryModel>>());
+  late CategoriesRepository _categoryRepository;
+  late MenuRepository _menuRepository;
+  late MenuBloc _menuBloc;
+  late AppDatabase _menuDb;
   final _orderBloc = OrderBloc(GetIt.I<List<ProductModel>>());
   final itemMenuScrollController = ItemScrollController();
   final itemAppbarScrollController = ItemScrollController();
   final itemPositionsListener = ItemPositionsListener.create();
-  late bool isScrollAble = true;
   late int selectedCategoryIndex;
 
   @override
   void initState() {
-    _productsBloc.add(ProductsLoadingEvent());
+    _menuDb = AppDatabase();
+    _categoryRepository = CategoriesRepository(
+        networkCategoriesDataSource:
+            NetworkCategoriesDataSource(client: http.Client()),
+        dbCategoriesDataSource: DbCategoriesDataSource(menuDb: _menuDb));
+    _menuRepository = MenuRepository(
+        networkMenuDataSource: NetworkMenuDataSource(client: http.Client()),
+        dbMenuDataSource: DbMenuDataSource(menuDb: _menuDb));
+    _menuBloc = MenuBloc(
+        menuRepository: _menuRepository,
+        categoryRepository: _categoryRepository);
+    _menuBloc.add(const LoadCategoriesEvent());
+
     itemPositionsListener.itemPositions.addListener(_onChageVisibility);
     selectedCategoryIndex = 0;
     super.initState();
   }
 
   void _onChageVisibility() {
-    if (isScrollAble) {
-      final indices = itemPositionsListener.itemPositions.value
-          .map((item) => item.index)
-          .toList();
-      if (indices.isEmpty) return;
-      if (selectedCategoryIndex != indices[0]) {
-        setState(() {
-          selectedCategoryIndex = indices[0];
-        });
-        itemAppbarScrollController.scrollTo(
-          index: selectedCategoryIndex,
-          alignment: 0.1,
-          duration: const Duration(milliseconds: 450),
-        );
-      }
+    final indices = itemPositionsListener.itemPositions.value
+        .map((item) => item.index)
+        .toList();
+    if (indices.isEmpty) return;
+    if (selectedCategoryIndex != indices[0]) {
+      setState(() {
+        selectedCategoryIndex = indices[0];
+      });
+      itemAppbarScrollController.scrollTo(
+        index: selectedCategoryIndex,
+        alignment: 0.1,
+        duration: const Duration(milliseconds: 450),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => _orderBloc,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => _menuBloc,
+        ),
+        BlocProvider(
+          create: (context) => _orderBloc,
+        ),
+      ],
       child: Scaffold(
         appBar: AppBar(
           titleSpacing: 0,
           backgroundColor: Colors.transparent,
           title: SizedBox(
             height: 100,
-            child: BlocBuilder<ProductsBloc, ProductsState>(
-              bloc: _productsBloc,
+            child: BlocBuilder<MenuBloc, MenuState>(
+              bloc: _menuBloc,
               builder: (context, state) {
-                if (state is ProductsLoading) {
+                if (state is ProgressMenuState) {
                   return CategoriesAppBar(
-                    isScrollAble: isScrollAble,
                     appBarItemScrollController: itemAppbarScrollController,
                     menuItemScrollController: itemMenuScrollController,
                     selectedCategoryIndex: selectedCategoryIndex,
                     model: const [],
                   );
                 }
-                if (state is ProductsLoaded) {
+                if (state is IdleMenuState) {
                   return CategoriesAppBar(
-                    isScrollAble: isScrollAble,
                     appBarItemScrollController: itemAppbarScrollController,
                     menuItemScrollController: itemMenuScrollController,
                     selectedCategoryIndex: selectedCategoryIndex,
-                    model: state.categories,
+                    model: state.categories ?? [],
                   );
                 }
                 return const Center(
@@ -120,29 +140,26 @@ class _MenuScreenState extends State<MenuScreen> {
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: BlocBuilder<ProductsBloc, ProductsState>(
-            bloc: _productsBloc,
+          child: BlocBuilder<MenuBloc, MenuState>(
+            bloc: _menuBloc,
             builder: (context, state) {
-              if (state is ProductsLoading) {
+              if (state is ProgressMenuState) {
                 return const Center(
                     child: CircularProgressIndicator(
                   color: AppColors.primary,
                 ));
               }
-              if (state is ProductsLoaded) {
+              if (state is IdleMenuState) {
                 return ScrollablePositionedList.builder(
                   itemPositionsListener: itemPositionsListener,
                   itemScrollController: itemMenuScrollController,
-                  itemCount: state.categories.length,
+                  itemCount: state.categories?.length ?? 0,
                   itemBuilder: (context, index) {
-                    return ProdustGrid(model: state.categories[index]);
+                    return ProdustGrid(model: state.categories![index]);
                   },
                 );
               }
-              return const Center(
-                  child: CircularProgressIndicator(
-                color: AppColors.white,
-              ));
+              return const SizedBox();
             },
           ),
         ),

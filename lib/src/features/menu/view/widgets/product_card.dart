@@ -127,6 +127,11 @@ class _ProductCardState extends State<ProductCard> {
             CachedNetworkImage(
               height: 100,
               imageUrl: widget.model.imageUrl,
+              errorWidget: (context, url, error) => const Icon(
+                Icons.error,
+                size: 50,
+                color: Colors.red,
+              ),
               progressIndicatorBuilder: (context, url, downloadProgress) =>
                   Center(
                 child: SizedBox(
@@ -138,7 +143,6 @@ class _ProductCardState extends State<ProductCard> {
                   ),
                 ),
               ),
-              errorWidget: (context, url, error) => const Icon(Icons.error),
             ),
             Text(
               widget.model.name,
