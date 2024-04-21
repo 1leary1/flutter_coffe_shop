@@ -30,13 +30,11 @@ final class DbMenuDataSource implements ISavableMenuDataSource {
             ))
         .toList();
 
-    print(items.length);
     return items.map((e) => MenuProductDto.fromDb(e)).toList();
   }
 
   @override
   Future<void> saveMenuItems({required List<MenuProductDto> menuItems}) async {
-    //List<Product> products = menuItems.map((e) => e.toDb()).toList();
     if (menuItems.isNotEmpty) {
       _menuDb.delete(_menuDb.products)
         ..where((tbl) => tbl.categoryId.equals(menuItems.first.category.id))
@@ -52,14 +50,5 @@ final class DbMenuDataSource implements ISavableMenuDataSource {
             ));
       });
     }
-
-    // for (var item in menuItems) {
-    //   await _menuDb.into(_menuDb.products).insert(Product(
-    //       id: id,
-    //       categoryId: categoryId,
-    //       imageUrl: imageUrl,
-    //       name: name,
-    //       price: price));
-    // }
   }
 }
