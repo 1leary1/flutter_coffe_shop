@@ -1,3 +1,4 @@
+import 'package:coffe_shop/src/features/map/view/map_screen.dart';
 import 'package:coffe_shop/src/features/menu/bloc/menu_bloc.dart';
 import 'package:coffe_shop/src/features/menu/data/category_repository.dart';
 import 'package:coffe_shop/src/features/menu/data/data_sources/categories_data_source.dart';
@@ -88,32 +89,57 @@ class _MenuScreenState extends State<MenuScreen> {
         appBar: AppBar(
           titleSpacing: 0,
           backgroundColor: Colors.transparent,
-          title: SizedBox(
-            height: 100,
-            child: BlocBuilder<MenuBloc, MenuState>(
-              bloc: _menuBloc,
-              builder: (context, state) {
-                if (state is ProgressMenuState) {
-                  return CategoriesAppBar(
-                    appBarItemScrollController: itemAppbarScrollController,
-                    menuItemScrollController: itemMenuScrollController,
-                    selectedCategoryIndex: selectedCategoryIndex,
-                    model: const [],
-                  );
-                }
-                if (state is IdleMenuState) {
-                  return CategoriesAppBar(
-                    appBarItemScrollController: itemAppbarScrollController,
-                    menuItemScrollController: itemMenuScrollController,
-                    selectedCategoryIndex: selectedCategoryIndex,
-                    model: state.categories ?? [],
-                  );
-                }
-                return const Center(
-                    child: CircularProgressIndicator(
-                  color: AppColors.white,
-                ));
-              },
+          title: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: SizedBox(
+              height: 40,
+              child: TextButton.icon(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const MapScreen()),
+                    );
+                  },
+                  icon: const Icon(
+                    Icons.location_on,
+                    color: AppColors.primary,
+                  ),
+                  label: Text(
+                    'Ленина 15/1',
+                    style: Theme.of(context).textTheme.titleSmall,
+                  )),
+            ),
+          ),
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(60),
+            child: SizedBox(
+              height: 70,
+              child: BlocBuilder<MenuBloc, MenuState>(
+                bloc: _menuBloc,
+                builder: (context, state) {
+                  if (state is ProgressMenuState) {
+                    return CategoriesAppBar(
+                      appBarItemScrollController: itemAppbarScrollController,
+                      menuItemScrollController: itemMenuScrollController,
+                      selectedCategoryIndex: selectedCategoryIndex,
+                      model: const [],
+                    );
+                  }
+                  if (state is IdleMenuState) {
+                    return CategoriesAppBar(
+                      appBarItemScrollController: itemAppbarScrollController,
+                      menuItemScrollController: itemMenuScrollController,
+                      selectedCategoryIndex: selectedCategoryIndex,
+                      model: state.categories ?? [],
+                    );
+                  }
+                  return const Center(
+                      child: CircularProgressIndicator(
+                    color: AppColors.white,
+                  ));
+                },
+              ),
             ),
           ),
         ),
