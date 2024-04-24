@@ -1,5 +1,5 @@
 import 'package:coffe_shop/src/features/menu/data/data_sources/categories_data_source.dart';
-import 'package:coffe_shop/src/features/menu/data/database/database.dart';
+import 'package:coffe_shop/src/common/database/database.dart';
 import 'package:coffe_shop/src/features/menu/modeles/dto/menu_category_dto.dart';
 
 abstract interface class ISavableCategoriesDataSource

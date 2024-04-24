@@ -1,5 +1,5 @@
 import 'package:coffe_shop/src/features/menu/data/data_sources/menu_data_source.dart';
-import 'package:coffe_shop/src/features/menu/data/database/database.dart';
+import 'package:coffe_shop/src/common/database/database.dart';
 import 'package:coffe_shop/src/features/menu/modeles/dto/menu_product_dto.dart';
 import 'package:drift/drift.dart';
 
@@ -23,6 +23,7 @@ final class DbMenuDataSource implements ISavableMenuDataSource {
     List<Product> items = result
         .map((row) => Product(
               id: row.id,
+              page: row.id,
               categoryId: row.categoryId,
               imageUrl: row.imageUrl,
               name: row.name,
@@ -43,6 +44,7 @@ final class DbMenuDataSource implements ISavableMenuDataSource {
       menuItems.forEach((element) async {
         await _menuDb.into(_menuDb.products).insert(ProductsCompanion(
               id: Value(element.id),
+              page: Value(element.page),
               categoryId: Value(element.category.id),
               imageUrl: Value(element.imageUrl),
               name: Value(element.name),

@@ -5,7 +5,7 @@ import 'package:coffe_shop/src/features/menu/data/data_sources/categories_data_s
 import 'package:coffe_shop/src/features/menu/data/data_sources/menu_data_source.dart';
 import 'package:coffe_shop/src/features/menu/data/data_sources/savable_categories_data_source.dart';
 import 'package:coffe_shop/src/features/menu/data/data_sources/savable_menu_data_source.dart';
-import 'package:coffe_shop/src/features/menu/data/database/database.dart';
+import 'package:coffe_shop/src/common/database/database.dart';
 import 'package:coffe_shop/src/features/menu/data/menu_repository.dart';
 import 'package:coffe_shop/src/features/menu/modeles/product_model.dart';
 import 'package:coffe_shop/src/features/menu/view/widgets/category_appbar.dart';

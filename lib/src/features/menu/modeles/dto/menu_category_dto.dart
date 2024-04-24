@@ -1,6 +1,6 @@
 import 'package:coffe_shop/src/features/menu/modeles/category_model.dart';
 
-import '../../data/database/database.dart';
+import '../../../../common/database/database.dart';
 
 class MenuCategoryDto {
   final int id;

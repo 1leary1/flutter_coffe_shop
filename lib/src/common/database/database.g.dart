@@ -193,6 +193,11 @@ class $ProductsTable extends Products with TableInfo<$ProductsTable, Product> {
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
       type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _pageMeta = const VerificationMeta('page');
+  @override
+  late final GeneratedColumn<int> page = GeneratedColumn<int>(
+      'page', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
   static const VerificationMeta _categoryIdMeta =
       const VerificationMeta('categoryId');
   @override
@@ -216,7 +221,8 @@ class $ProductsTable extends Products with TableInfo<$ProductsTable, Product> {
       'price', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
   @override
-  List<GeneratedColumn> get $columns => [id, categoryId, imageUrl, name, price];
+  List<GeneratedColumn> get $columns =>
+      [id, page, categoryId, imageUrl, name, price];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -231,6 +237,12 @@ class $ProductsTable extends Products with TableInfo<$ProductsTable, Product> {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     } else if (isInserting) {
       context.missing(_idMeta);
+    }
+    if (data.containsKey('page')) {
+      context.handle(
+          _pageMeta, page.isAcceptableOrUnknown(data['page']!, _pageMeta));
+    } else if (isInserting) {
+      context.missing(_pageMeta);
     }
     if (data.containsKey('category_id')) {
       context.handle(
@@ -269,6 +281,8 @@ class $ProductsTable extends Products with TableInfo<$ProductsTable, Product> {
     return Product(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      page: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}page'])!,
       categoryId: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}category_id'])!,
       imageUrl: attachedDatabase.typeMapping
@@ -288,12 +302,14 @@ class $ProductsTable extends Products with TableInfo<$ProductsTable, Product> {
 
 class Product extends DataClass implements Insertable<Product> {
   final int id;
+  final int page;
   final int categoryId;
   final String imageUrl;
   final String name;
   final String price;
   const Product(
       {required this.id,
+      required this.page,
       required this.categoryId,
       required this.imageUrl,
       required this.name,
@@ -302,6 +318,7 @@ class Product extends DataClass implements Insertable<Product> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
+    map['page'] = Variable<int>(page);
     map['category_id'] = Variable<int>(categoryId);
     map['image_url'] = Variable<String>(imageUrl);
     map['name'] = Variable<String>(name);
@@ -312,6 +329,7 @@ class Product extends DataClass implements Insertable<Product> {
   ProductsCompanion toCompanion(bool nullToAbsent) {
     return ProductsCompanion(
       id: Value(id),
+      page: Value(page),
       categoryId: Value(categoryId),
       imageUrl: Value(imageUrl),
       name: Value(name),
@@ -324,6 +342,7 @@ class Product extends DataClass implements Insertable<Product> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Product(
       id: serializer.fromJson<int>(json['id']),
+      page: serializer.fromJson<int>(json['page']),
       categoryId: serializer.fromJson<int>(json['categoryId']),
       imageUrl: serializer.fromJson<String>(json['imageUrl']),
       name: serializer.fromJson<String>(json['name']),
@@ -335,6 +354,7 @@ class Product extends DataClass implements Insertable<Product> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
+      'page': serializer.toJson<int>(page),
       'categoryId': serializer.toJson<int>(categoryId),
       'imageUrl': serializer.toJson<String>(imageUrl),
       'name': serializer.toJson<String>(name),
@@ -344,12 +364,14 @@ class Product extends DataClass implements Insertable<Product> {
 
   Product copyWith(
           {int? id,
+          int? page,
           int? categoryId,
           String? imageUrl,
           String? name,
           String? price}) =>
       Product(
         id: id ?? this.id,
+        page: page ?? this.page,
         categoryId: categoryId ?? this.categoryId,
         imageUrl: imageUrl ?? this.imageUrl,
         name: name ?? this.name,
@@ -359,6 +381,7 @@ class Product extends DataClass implements Insertable<Product> {
   String toString() {
     return (StringBuffer('Product(')
           ..write('id: $id, ')
+          ..write('page: $page, ')
           ..write('categoryId: $categoryId, ')
           ..write('imageUrl: $imageUrl, ')
           ..write('name: $name, ')
@@ -368,12 +391,13 @@ class Product extends DataClass implements Insertable<Product> {
   }
 
   @override
-  int get hashCode => Object.hash(id, categoryId, imageUrl, name, price);
+  int get hashCode => Object.hash(id, page, categoryId, imageUrl, name, price);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Product &&
           other.id == this.id &&
+          other.page == this.page &&
           other.categoryId == this.categoryId &&
           other.imageUrl == this.imageUrl &&
           other.name == this.name &&
@@ -382,6 +406,7 @@ class Product extends DataClass implements Insertable<Product> {
 
 class ProductsCompanion extends UpdateCompanion<Product> {
   final Value<int> id;
+  final Value<int> page;
   final Value<int> categoryId;
   final Value<String> imageUrl;
   final Value<String> name;
@@ -389,6 +414,7 @@ class ProductsCompanion extends UpdateCompanion<Product> {
   final Value<int> rowid;
   const ProductsCompanion({
     this.id = const Value.absent(),
+    this.page = const Value.absent(),
     this.categoryId = const Value.absent(),
     this.imageUrl = const Value.absent(),
     this.name = const Value.absent(),
@@ -397,18 +423,21 @@ class ProductsCompanion extends UpdateCompanion<Product> {
   });
   ProductsCompanion.insert({
     required int id,
+    required int page,
     required int categoryId,
     required String imageUrl,
     required String name,
     required String price,
     this.rowid = const Value.absent(),
   })  : id = Value(id),
+        page = Value(page),
         categoryId = Value(categoryId),
         imageUrl = Value(imageUrl),
         name = Value(name),
         price = Value(price);
   static Insertable<Product> custom({
     Expression<int>? id,
+    Expression<int>? page,
     Expression<int>? categoryId,
     Expression<String>? imageUrl,
     Expression<String>? name,
@@ -417,6 +446,7 @@ class ProductsCompanion extends UpdateCompanion<Product> {
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
+      if (page != null) 'page': page,
       if (categoryId != null) 'category_id': categoryId,
       if (imageUrl != null) 'image_url': imageUrl,
       if (name != null) 'name': name,
@@ -427,6 +457,7 @@ class ProductsCompanion extends UpdateCompanion<Product> {
 
   ProductsCompanion copyWith(
       {Value<int>? id,
+      Value<int>? page,
       Value<int>? categoryId,
       Value<String>? imageUrl,
       Value<String>? name,
@@ -434,6 +465,7 @@ class ProductsCompanion extends UpdateCompanion<Product> {
       Value<int>? rowid}) {
     return ProductsCompanion(
       id: id ?? this.id,
+      page: page ?? this.page,
       categoryId: categoryId ?? this.categoryId,
       imageUrl: imageUrl ?? this.imageUrl,
       name: name ?? this.name,
@@ -447,6 +479,9 @@ class ProductsCompanion extends UpdateCompanion<Product> {
     final map = <String, Expression>{};
     if (id.present) {
       map['id'] = Variable<int>(id.value);
+    }
+    if (page.present) {
+      map['page'] = Variable<int>(page.value);
     }
     if (categoryId.present) {
       map['category_id'] = Variable<int>(categoryId.value);
@@ -470,6 +505,7 @@ class ProductsCompanion extends UpdateCompanion<Product> {
   String toString() {
     return (StringBuffer('ProductsCompanion(')
           ..write('id: $id, ')
+          ..write('page: $page, ')
           ..write('categoryId: $categoryId, ')
           ..write('imageUrl: $imageUrl, ')
           ..write('name: $name, ')
@@ -480,13 +516,234 @@ class ProductsCompanion extends UpdateCompanion<Product> {
   }
 }
 
+class $MapPointsTable extends MapPoints
+    with TableInfo<$MapPointsTable, MapPoint> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $MapPointsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _addressMeta =
+      const VerificationMeta('address');
+  @override
+  late final GeneratedColumn<String> address = GeneratedColumn<String>(
+      'address', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _latMeta = const VerificationMeta('lat');
+  @override
+  late final GeneratedColumn<double> lat = GeneratedColumn<double>(
+      'lat', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _lngMeta = const VerificationMeta('lng');
+  @override
+  late final GeneratedColumn<double> lng = GeneratedColumn<double>(
+      'lng', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [address, lat, lng];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'map_points';
+  @override
+  VerificationContext validateIntegrity(Insertable<MapPoint> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('address')) {
+      context.handle(_addressMeta,
+          address.isAcceptableOrUnknown(data['address']!, _addressMeta));
+    } else if (isInserting) {
+      context.missing(_addressMeta);
+    }
+    if (data.containsKey('lat')) {
+      context.handle(
+          _latMeta, lat.isAcceptableOrUnknown(data['lat']!, _latMeta));
+    } else if (isInserting) {
+      context.missing(_latMeta);
+    }
+    if (data.containsKey('lng')) {
+      context.handle(
+          _lngMeta, lng.isAcceptableOrUnknown(data['lng']!, _lngMeta));
+    } else if (isInserting) {
+      context.missing(_lngMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => const {};
+  @override
+  MapPoint map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return MapPoint(
+      address: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}address'])!,
+      lat: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}lat'])!,
+      lng: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}lng'])!,
+    );
+  }
+
+  @override
+  $MapPointsTable createAlias(String alias) {
+    return $MapPointsTable(attachedDatabase, alias);
+  }
+}
+
+class MapPoint extends DataClass implements Insertable<MapPoint> {
+  final String address;
+  final double lat;
+  final double lng;
+  const MapPoint({required this.address, required this.lat, required this.lng});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['address'] = Variable<String>(address);
+    map['lat'] = Variable<double>(lat);
+    map['lng'] = Variable<double>(lng);
+    return map;
+  }
+
+  MapPointsCompanion toCompanion(bool nullToAbsent) {
+    return MapPointsCompanion(
+      address: Value(address),
+      lat: Value(lat),
+      lng: Value(lng),
+    );
+  }
+
+  factory MapPoint.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return MapPoint(
+      address: serializer.fromJson<String>(json['address']),
+      lat: serializer.fromJson<double>(json['lat']),
+      lng: serializer.fromJson<double>(json['lng']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'address': serializer.toJson<String>(address),
+      'lat': serializer.toJson<double>(lat),
+      'lng': serializer.toJson<double>(lng),
+    };
+  }
+
+  MapPoint copyWith({String? address, double? lat, double? lng}) => MapPoint(
+        address: address ?? this.address,
+        lat: lat ?? this.lat,
+        lng: lng ?? this.lng,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('MapPoint(')
+          ..write('address: $address, ')
+          ..write('lat: $lat, ')
+          ..write('lng: $lng')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(address, lat, lng);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is MapPoint &&
+          other.address == this.address &&
+          other.lat == this.lat &&
+          other.lng == this.lng);
+}
+
+class MapPointsCompanion extends UpdateCompanion<MapPoint> {
+  final Value<String> address;
+  final Value<double> lat;
+  final Value<double> lng;
+  final Value<int> rowid;
+  const MapPointsCompanion({
+    this.address = const Value.absent(),
+    this.lat = const Value.absent(),
+    this.lng = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  MapPointsCompanion.insert({
+    required String address,
+    required double lat,
+    required double lng,
+    this.rowid = const Value.absent(),
+  })  : address = Value(address),
+        lat = Value(lat),
+        lng = Value(lng);
+  static Insertable<MapPoint> custom({
+    Expression<String>? address,
+    Expression<double>? lat,
+    Expression<double>? lng,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (address != null) 'address': address,
+      if (lat != null) 'lat': lat,
+      if (lng != null) 'lng': lng,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  MapPointsCompanion copyWith(
+      {Value<String>? address,
+      Value<double>? lat,
+      Value<double>? lng,
+      Value<int>? rowid}) {
+    return MapPointsCompanion(
+      address: address ?? this.address,
+      lat: lat ?? this.lat,
+      lng: lng ?? this.lng,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (address.present) {
+      map['address'] = Variable<String>(address.value);
+    }
+    if (lat.present) {
+      map['lat'] = Variable<double>(lat.value);
+    }
+    if (lng.present) {
+      map['lng'] = Variable<double>(lng.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('MapPointsCompanion(')
+          ..write('address: $address, ')
+          ..write('lat: $lat, ')
+          ..write('lng: $lng, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   late final $CategoriesTable categories = $CategoriesTable(this);
   late final $ProductsTable products = $ProductsTable(this);
+  late final $MapPointsTable mapPoints = $MapPointsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [categories, products];
+  List<DatabaseSchemaEntity> get allSchemaEntities =>
+      [categories, products, mapPoints];
 }

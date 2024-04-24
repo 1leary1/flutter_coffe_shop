@@ -64,9 +64,6 @@ final class MenuBloc extends Bloc<MenuEvent, MenuState> {
         page: _currentPage,
         limit: _pageLimit,
       );
-      if (items.length < _pageLimit) {
-        // Обновить счетчик страниц и выбрать следующую категорию
-      }
 
       emit(SuccessfulMenuState(categories: state.categories, items: items));
     } on Object {

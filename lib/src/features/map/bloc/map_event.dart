@@ -6,3 +6,7 @@ sealed class MapEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+final class LoadPointsEvent extends MapEvent {
+  const LoadPointsEvent();
+}

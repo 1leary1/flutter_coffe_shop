@@ -29,7 +29,7 @@ final class MenuRepository implements IMenuRepository {
     try {
       dtos = await _networkMenuDataSource.fetchMenuItems(
           categoryId: category.id, page: page, limit: limit);
-      _dbMenuDataSource.saveMenuItems(menuItems: dtos);
+      //_dbMenuDataSource.saveMenuItems(menuItems: dtos);
     } on SocketException {
       dtos = await _dbMenuDataSource.fetchMenuItems(
           categoryId: category.id, page: page, limit: limit);
