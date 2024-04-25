@@ -14,6 +14,7 @@ class AddressBloc extends Bloc<AddressEvent, AddressState> {
   _setPoint(SetPointEvent event, Emitter<AddressState> emit) async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     _prefs.setString('address', event.pointDto.address);
+    emit(NoAddressSelectedState());
     emit(AddressSelectedState(address: event.pointDto.address));
   }
 

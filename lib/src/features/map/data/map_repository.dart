@@ -23,7 +23,7 @@ final class MapRepository implements IMapRepository {
     var dtos = <MapPointDto>[];
     try {
       dtos = await _networkMapDataSource.fetchPoints();
-      //_dbMapDataSource.savePoints(points: dtos);
+      _dbMapDataSource.savePoints(points: dtos);
     } on SocketException {
       dtos = await _dbMapDataSource.fetchPoints();
     }

@@ -29,7 +29,8 @@ class PointBottomSheet extends StatelessWidget {
                 onPressed: () {
                   GetIt.I<AddressBloc>().add(SetPointEvent(pointDto: point));
                   GetIt.I<AddressBloc>().add(CheckAddressEvent());
-                  Navigator.of(context).pop();
+
+                  Navigator.pop(context);
                   Navigator.pop(context);
                 },
                 style: TextButton.styleFrom(
