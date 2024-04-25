@@ -8,11 +8,11 @@ abstract interface class IMapRepository {
   Future<List<MapPointDto>> loadPoints();
 }
 
-final class CategoriesRepository implements IMapRepository {
+final class MapRepository implements IMapRepository {
   final IMapDataSource _networkMapDataSource;
   final ISavableMapDataSource _dbMapDataSource;
 
-  const CategoriesRepository({
+  const MapRepository({
     required IMapDataSource networkMapDataSource,
     required ISavableMapDataSource dbMapDataSource,
   })  : _networkMapDataSource = networkMapDataSource,
@@ -23,7 +23,7 @@ final class CategoriesRepository implements IMapRepository {
     var dtos = <MapPointDto>[];
     try {
       dtos = await _networkMapDataSource.fetchPoints();
-      _dbMapDataSource.savePoints(points: dtos);
+      //_dbMapDataSource.savePoints(points: dtos);
     } on SocketException {
       dtos = await _dbMapDataSource.fetchPoints();
     }

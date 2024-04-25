@@ -1,3 +1,4 @@
+import 'package:coffe_shop/src/features/map/bloc/address/address_bloc.dart';
 import 'package:coffe_shop/src/features/map/view/map_screen.dart';
 import 'package:coffe_shop/src/features/menu/bloc/menu_bloc.dart';
 import 'package:coffe_shop/src/features/menu/data/category_repository.dart';
@@ -18,6 +19,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MenuScreen extends StatefulWidget {
   const MenuScreen({super.key});
@@ -27,10 +29,11 @@ class MenuScreen extends StatefulWidget {
 }
 
 class _MenuScreenState extends State<MenuScreen> {
-  late CategoriesRepository _categoryRepository;
-  late MenuRepository _menuRepository;
-  late MenuBloc _menuBloc;
-  late AppDatabase _menuDb;
+  late final CategoriesRepository _categoryRepository;
+  late final MenuRepository _menuRepository;
+  late final MenuBloc _menuBloc;
+  late final AppDatabase _menuDb;
+
   final _orderBloc = OrderBloc(GetIt.I<List<ProductModel>>());
   final itemMenuScrollController = ItemScrollController();
   final itemAppbarScrollController = ItemScrollController();
@@ -51,6 +54,8 @@ class _MenuScreenState extends State<MenuScreen> {
         menuRepository: _menuRepository,
         categoryRepository: _categoryRepository);
     _menuBloc.add(const LoadCategoriesEvent());
+
+    GetIt.I<AddressBloc>().add(CheckAddressEvent());
 
     itemPositionsListener.itemPositions.addListener(_onChageVisibility);
     selectedCategoryIndex = 0;
@@ -93,22 +98,52 @@ class _MenuScreenState extends State<MenuScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: SizedBox(
               height: 40,
-              child: TextButton.icon(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const MapScreen()),
+              child: BlocBuilder<AddressBloc, AddressState>(
+                bloc: GetIt.I<AddressBloc>(),
+                builder: (context, state) {
+                  if (state is AddressSelectedState) {
+                    return TextButton.icon(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const MapScreen(),
+                          ),
+                        );
+                      },
+                      icon: const Icon(
+                        Icons.location_on,
+                        color: AppColors.primary,
+                      ),
+                      label: Text(
+                        state.address,
+                        style: Theme.of(context).textTheme.titleSmall,
+                      ),
                     );
-                  },
-                  icon: const Icon(
-                    Icons.location_on,
-                    color: AppColors.primary,
-                  ),
-                  label: Text(
-                    'Ленина 15/1',
-                    style: Theme.of(context).textTheme.titleSmall,
-                  )),
+                  }
+                  if (state is NoAddressSelectedState) {
+                    return TextButton.icon(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const MapScreen(),
+                          ),
+                        );
+                      },
+                      icon: const Icon(
+                        Icons.location_on,
+                        color: AppColors.primary,
+                      ),
+                      label: Text(
+                        'Выбрать кофейню',
+                        style: Theme.of(context).textTheme.titleSmall,
+                      ),
+                    );
+                  }
+                  return Container();
+                },
+              ),
             ),
           ),
           bottom: PreferredSize(

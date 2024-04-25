@@ -14,7 +14,7 @@ class MapPointDto extends Equatable {
 
   factory MapPointDto.fromJson(Map<String, dynamic> json) {
     return MapPointDto(
-      address: json["adress"],
+      address: json["address"],
       lat: json["lat"],
       lng: json["lng"],
     );

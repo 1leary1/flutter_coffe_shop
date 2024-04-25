@@ -1,3 +1,4 @@
+import 'package:coffe_shop/src/features/map/bloc/address/address_bloc.dart';
 import 'package:coffe_shop/src/features/menu/modeles/category_model.dart';
 import 'package:coffe_shop/src/features/menu/modeles/product_model.dart';
 import 'package:coffe_shop/src/features/menu/view/menu_screen.dart';
@@ -25,4 +26,7 @@ class CoffeShop extends StatelessWidget {
 void _initGetIt() {
   GetIt.I.registerLazySingleton<List<CategoryModel>>(() => []);
   GetIt.I.registerLazySingleton<List<ProductModel>>(() => []);
+  GetIt.I.registerLazySingleton<AddressBloc>(
+    () => AddressBloc(),
+  );
 }
