@@ -12,15 +12,15 @@ class AddressBloc extends Bloc<AddressEvent, AddressState> {
     on<CheckAddressEvent>((event, emit) => _checkAdress(event, emit));
   }
   _setPoint(SetPointEvent event, Emitter<AddressState> emit) async {
-    SharedPreferences _prefs = await SharedPreferences.getInstance();
-    _prefs.setString('address', event.pointDto.address);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('address', event.pointDto.address);
     emit(NoAddressSelectedState());
     emit(AddressSelectedState(address: event.pointDto.address));
   }
 
   _checkAdress(CheckAddressEvent event, Emitter<AddressState> emit) async {
-    SharedPreferences _prefs = await SharedPreferences.getInstance();
-    String? address = _prefs.getString('address');
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? address = prefs.getString('address');
     if (address != null) {
       emit(AddressSelectedState(address: address));
     } else {

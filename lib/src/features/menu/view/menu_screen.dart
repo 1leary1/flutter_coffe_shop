@@ -19,7 +19,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class MenuScreen extends StatefulWidget {
   const MenuScreen({super.key});
@@ -115,9 +114,12 @@ class _MenuScreenState extends State<MenuScreen> {
                         Icons.location_on,
                         color: AppColors.primary,
                       ),
-                      label: Text(
-                        state.address,
-                        style: Theme.of(context).textTheme.titleSmall,
+                      label: SizedBox(
+                        width: MediaQuery.sizeOf(context).width,
+                        child: Text(
+                          state.address,
+                          style: Theme.of(context).textTheme.titleSmall,
+                        ),
                       ),
                     );
                   }
@@ -135,9 +137,12 @@ class _MenuScreenState extends State<MenuScreen> {
                         Icons.location_on,
                         color: AppColors.primary,
                       ),
-                      label: Text(
-                        'Выбрать кофейню',
-                        style: Theme.of(context).textTheme.titleSmall,
+                      label: SizedBox(
+                        width: MediaQuery.sizeOf(context).width,
+                        child: Text(
+                          'Выбрать кофейню',
+                          style: Theme.of(context).textTheme.titleSmall,
+                        ),
                       ),
                     );
                   }
