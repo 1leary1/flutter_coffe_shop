@@ -9,5 +9,10 @@ final class LoadCategoriesEvent extends MenuEvent {
 }
 
 final class LoadPageEvent extends MenuEvent {
-  const LoadPageEvent();
+  final int category;
+  final int page;
+  const LoadPageEvent({
+    required this.category,
+    required this.page,
+  });
 }

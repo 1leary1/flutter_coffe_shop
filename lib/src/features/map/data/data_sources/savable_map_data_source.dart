@@ -7,22 +7,22 @@ abstract interface class ISavableMapDataSource implements IMapDataSource {
 }
 
 final class DbMapDataSource implements ISavableMapDataSource {
-  final AppDatabase _menuDb;
+  final AppDatabase _mapDb;
 
-  const DbMapDataSource({required AppDatabase menuDb}) : _menuDb = menuDb;
+  const DbMapDataSource({required AppDatabase menuDb}) : _mapDb = menuDb;
 
   @override
   Future<List<MapPointDto>> fetchPoints() async {
-    List<MapPoint> items = await _menuDb.select(_menuDb.mapPoints).get();
+    List<MapPoint> items = await _mapDb.select(_mapDb.mapPoints).get();
 
     return items.map((e) => MapPointDto.fromDb(e)).toList();
   }
 
   @override
   Future<void> savePoints({required List<MapPointDto> points}) async {
-    await _menuDb.delete(_menuDb.mapPoints).go();
+    await _mapDb.delete(_mapDb.mapPoints).go();
     for (var point in points) {
-      await _menuDb.into(_menuDb.mapPoints).insert(
+      await _mapDb.into(_mapDb.mapPoints).insert(
             MapPointsCompanion.insert(
               address: point.address,
               lat: point.lat,
