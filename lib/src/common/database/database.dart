@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:path_provider/path_provider.dart';
@@ -15,13 +16,20 @@ class Categories extends Table {
 
 class Products extends Table {
   IntColumn get id => integer()();
+  IntColumn get page => integer()();
   IntColumn get categoryId => integer()();
   TextColumn get imageUrl => text()();
   TextColumn get name => text()();
   TextColumn get price => text()();
 }
 
-@DriftDatabase(tables: [Categories, Products])
+class MapPoints extends Table {
+  TextColumn get address => text()();
+  RealColumn get lat => real()();
+  RealColumn get lng => real()();
+}
+
+@DriftDatabase(tables: [Categories, Products, MapPoints])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 

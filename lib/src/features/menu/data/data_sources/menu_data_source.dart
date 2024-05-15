@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:coffe_shop/src/common/network/api_request.dart';
+import 'package:coffe_shop/src/common/network/coffe_api.dart';
 import 'package:coffe_shop/src/features/menu/modeles/dto/menu_product_dto.dart';
 import 'package:http/http.dart' as http;
 
@@ -19,7 +19,7 @@ final class NetworkMenuDataSource implements IMenuDataSource {
   Future<List<MenuProductDto>> fetchMenuItems(
       {required String categoryId, int page = 0, int limit = 25}) async {
     final response = await _client.get(Uri.parse(
-        '${CoffeApi.baseUrl}v1/products?page=0&limit=10&category=$categoryId'));
+        '${CoffeApi.baseUrl}v1/products?page=$page&limit=10&category=$categoryId'));
 
     if (response.statusCode == 200) {
       final List<MenuProductDto> products = [];

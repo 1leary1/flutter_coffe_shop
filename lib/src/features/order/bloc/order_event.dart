@@ -20,3 +20,9 @@ class OrderRemoveItemEvent extends OrderEvent {
 }
 
 class OrderRemoveAllItemsEvent extends OrderEvent {}
+
+class PostOrderEvent extends OrderEvent {
+  PostOrderEvent({required this.context});
+
+  final BuildContext context;
+}

@@ -1,5 +1,6 @@
 import 'package:coffe_shop/src/features/menu/modeles/category_model.dart';
 import 'package:coffe_shop/src/features/menu/view/widgets/product_card.dart';
+import 'package:coffe_shop/src/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class ProdustGrid extends StatelessWidget {
@@ -36,6 +37,18 @@ class ProdustGrid extends StatelessWidget {
               model: model.productsList[index],
             );
           },
+        ),
+        SizedBox(
+          width: double.infinity,
+          child: TextButton.icon(
+            onPressed: () {},
+            icon: const Icon(
+              Icons.arrow_drop_down_rounded,
+              color: AppColors.black,
+            ),
+            label: Text('Больше',
+                style: Theme.of(context).textTheme.displayMedium),
+          ),
         ),
       ],
     );

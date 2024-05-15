@@ -1,8 +1,9 @@
-import 'package:coffe_shop/src/features/menu/data/database/database.dart';
+import 'package:coffe_shop/src/common/database/database.dart';
 import 'package:coffe_shop/src/features/menu/modeles/product_model.dart';
 
 class MenuProductDto {
   final int id;
+  final int page;
   final String name;
   final String description;
   final CategoryInnerDto category;
@@ -11,6 +12,7 @@ class MenuProductDto {
 
   const MenuProductDto({
     required this.id,
+    required this.page,
     required this.name,
     required this.description,
     required this.category,
@@ -20,6 +22,7 @@ class MenuProductDto {
 
   factory MenuProductDto.fromJson(Map<String, dynamic> json) => MenuProductDto(
         id: json["id"],
+        page: 0,
         name: json["name"],
         description: json["description"],
         category: CategoryInnerDto.fromJson(json["category"]),
@@ -29,6 +32,7 @@ class MenuProductDto {
 
   Map<String, dynamic> toJson() => {
         "id": id,
+        "page": page,
         "name": name,
         "description": description,
         "category": category.toJson(),
@@ -48,6 +52,7 @@ class MenuProductDto {
   static MenuProductDto fromDb(Product product) {
     return MenuProductDto(
       id: product.id,
+      page: product.page,
       name: product.name,
       description: '',
       category: CategoryInnerDto(id: product.categoryId, slug: ''),
@@ -59,6 +64,7 @@ class MenuProductDto {
   Product toDb() {
     return Product(
       id: id,
+      page: page,
       categoryId: category.id,
       imageUrl: imageUrl,
       name: name,
