@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:coffe_shop/src/features/menu/modeles/product_model.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
@@ -39,9 +40,13 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
             return previousValue;
           },
         );
+
+        FirebaseMessaging.instance.requestPermission();
+        String? token = await FirebaseMessaging.instance.getToken();
+
         final Map<String, dynamic> order = {
           "positions": orderProducts,
-          "token": ""
+          "token": token,
         };
         final response = await http.post(
           Uri.parse('https://coffeeshop.academy.effective.band/api/v1/orders'),

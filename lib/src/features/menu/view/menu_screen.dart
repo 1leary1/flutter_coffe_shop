@@ -14,6 +14,7 @@ import 'package:coffe_shop/src/features/menu/view/widgets/product_grid.dart';
 import 'package:coffe_shop/src/features/order/bloc/order_bloc.dart';
 import 'package:coffe_shop/src/features/order/view/widgets/cart_button.dart';
 import 'package:coffe_shop/src/theme/app_colors.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -58,6 +59,10 @@ class _MenuScreenState extends State<MenuScreen> {
 
     itemPositionsListener.itemPositions.addListener(_onChageVisibility);
     selectedCategoryIndex = 0;
+
+    FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+        alert: true, badge: true, sound: true);
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {});
     super.initState();
   }
 
