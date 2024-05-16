@@ -60,9 +60,19 @@ class _MenuScreenState extends State<MenuScreen> {
     itemPositionsListener.itemPositions.addListener(_onChageVisibility);
     selectedCategoryIndex = 0;
 
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      if (message.notification != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(message.notification!.title.toString()),
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
+    });
+
     FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
         alert: true, badge: true, sound: true);
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {});
     super.initState();
   }
 
