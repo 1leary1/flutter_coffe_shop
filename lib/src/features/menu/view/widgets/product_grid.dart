@@ -1,9 +1,6 @@
-import 'package:coffe_shop/src/features/menu/bloc/menu_bloc.dart';
 import 'package:coffe_shop/src/features/menu/modeles/category_model.dart';
 import 'package:coffe_shop/src/features/menu/view/widgets/product_card.dart';
-import 'package:coffe_shop/src/theme/app_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProdustGrid extends StatelessWidget {
   final CategoryModel model;
