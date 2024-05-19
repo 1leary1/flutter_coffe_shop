@@ -1,3 +1,4 @@
+import 'package:coffe_shop/src/common/network/firebase_notifications.dart';
 import 'package:coffe_shop/src/features/map/bloc/address/address_bloc.dart';
 import 'package:coffe_shop/src/features/menu/modeles/category_model.dart';
 import 'package:coffe_shop/src/features/menu/modeles/product_model.dart';
@@ -10,6 +11,7 @@ import 'package:get_it/get_it.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await FirebaseNotifications().initForegroundNotifications();
   _initGetIt();
   runApp(const CoffeShop());
 }

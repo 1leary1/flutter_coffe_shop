@@ -40,22 +40,22 @@ class ProdustGrid extends StatelessWidget {
             );
           },
         ),
-        SizedBox(
-          width: double.infinity,
-          child: TextButton.icon(
-            onPressed: () {
-              context
-                  .read<MenuBloc>()
-                  .add(LoadPageEvent(category: int.parse(model.id), page: 2));
-            },
-            icon: const Icon(
-              Icons.arrow_drop_down_rounded,
-              color: AppColors.black,
-            ),
-            label: Text('Больше',
-                style: Theme.of(context).textTheme.displayMedium),
-          ),
-        ),
+        // SizedBox(
+        //   width: double.infinity,
+        //   child: TextButton.icon(
+        //     onPressed: () {
+        //       context
+        //           .read<MenuBloc>()
+        //           .add(LoadPageEvent(category: int.parse(model.id), page: 2));
+        //     },
+        //     icon: const Icon(
+        //       Icons.arrow_drop_down_rounded,
+        //       color: AppColors.black,
+        //     ),
+        //     label: Text('Больше',
+        //         style: Theme.of(context).textTheme.displayMedium),
+        //   ),
+        // ),
       ],
     );
   }
