@@ -41,38 +41,39 @@ class _MapScreenState extends State<MapScreen> {
     return pointsDto
         .map(
           (point) => PlacemarkMapObject(
-              mapId: MapObjectId('MapObject $point'),
-              point: Point(latitude: point.lat, longitude: point.lng),
-              opacity: 1,
-              icon: PlacemarkIcon.single(
-                PlacemarkIconStyle(
-                  image: BitmapDescriptor.fromAssetImage(
-                    ImageSources.point,
-                  ),
-                  scale: 0.1,
+            mapId: MapObjectId('MapObject $point'),
+            point: Point(latitude: point.lat, longitude: point.lng),
+            opacity: 1,
+            icon: PlacemarkIcon.single(
+              PlacemarkIconStyle(
+                image: BitmapDescriptor.fromAssetImage(
+                  ImageSources.point,
                 ),
+                scale: 0.1,
               ),
-              onTap: (_, __) {
-                showModalBottomSheet(
-                  showDragHandle: true,
-                  context: context,
-                  builder: (context) => PointBottomSheet(
-                    mapBloc: mapBloc,
-                    point: point,
-                  ),
-                );
-                _mapController.moveCamera(
-                  CameraUpdate.newCameraPosition(
-                    CameraPosition(
-                      target: Point(
-                        latitude: point.lat,
-                        longitude: point.lng,
-                      ),
-                      zoom: 15,
+            ),
+            onTap: (_, __) {
+              showModalBottomSheet(
+                showDragHandle: true,
+                context: context,
+                builder: (context) => PointBottomSheet(
+                  mapBloc: mapBloc,
+                  point: point,
+                ),
+              );
+              _mapController.moveCamera(
+                CameraUpdate.newCameraPosition(
+                  CameraPosition(
+                    target: Point(
+                      latitude: point.lat,
+                      longitude: point.lng,
                     ),
+                    zoom: 15,
                   ),
-                );
-              }),
+                ),
+              );
+            },
+          ),
         )
         .toList();
   }
