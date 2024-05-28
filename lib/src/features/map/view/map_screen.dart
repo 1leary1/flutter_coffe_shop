@@ -49,7 +49,7 @@ class _MapScreenState extends State<MapScreen> {
                 image: BitmapDescriptor.fromAssetImage(
                   ImageSources.point,
                 ),
-                scale: 0.1,
+                scale: 2,
               ),
             ),
             onTap: (_, __) {
