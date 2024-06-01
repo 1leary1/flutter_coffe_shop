@@ -1,5 +1,6 @@
 import 'package:coffe_shop/src/features/map/bloc/address/address_bloc.dart';
 import 'package:coffe_shop/src/features/map/bloc/map/map_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:coffe_shop/src/features/map/modeles/dto/map_point_dto.dart';
 import 'package:coffe_shop/src/theme/app_colors.dart';
 import 'package:flutter/material.dart';
@@ -43,7 +44,7 @@ class PointBottomSheet extends StatelessWidget {
                   ),
                 ),
                 child: Text(
-                  'Выбрать',
+                  AppLocalizations.of(context)!.selectAddress,
                   style: Theme.of(context).textTheme.headlineMedium,
                 ),
               ),

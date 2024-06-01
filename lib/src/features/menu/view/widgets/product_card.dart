@@ -4,6 +4,7 @@ import 'package:coffe_shop/src/features/order/bloc/order_bloc.dart';
 import 'package:coffe_shop/src/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ProductCard extends StatefulWidget {
   final ProductModel model;
@@ -102,7 +103,7 @@ class _ProductCardState extends State<ProductCard> {
           ),
           child: Center(
             child: Text(
-              "${widget.model.price} ₽",
+              "${widget.model.price} ${AppLocalizations.of(context)!.localeName == 'en' ? "\$" : "₽"}",
               style: Theme.of(context).textTheme.displaySmall,
             ),
           ),

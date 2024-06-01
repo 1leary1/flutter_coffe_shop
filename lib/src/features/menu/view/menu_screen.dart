@@ -1,6 +1,7 @@
 import 'package:coffe_shop/src/features/map/bloc/address/address_bloc.dart';
 import 'package:coffe_shop/src/features/map/view/map_screen.dart';
 import 'package:coffe_shop/src/features/menu/bloc/menu_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:coffe_shop/src/features/menu/data/category_repository.dart';
 import 'package:coffe_shop/src/features/menu/data/data_sources/categories_data_source.dart';
 import 'package:coffe_shop/src/features/menu/data/data_sources/menu_data_source.dart';
@@ -18,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class MenuScreen extends StatefulWidget {
@@ -140,7 +142,7 @@ class _MenuScreenState extends State<MenuScreen> {
                       label: SizedBox(
                         width: MediaQuery.sizeOf(context).width,
                         child: Text(
-                          'Выбрать кофейню',
+                          AppLocalizations.of(context)!.noAddressSelected,
                           style: Theme.of(context).textTheme.titleSmall,
                         ),
                       ),
@@ -197,7 +199,11 @@ class _MenuScreenState extends State<MenuScreen> {
                 visible: totalSum == 0 ? false : true,
                 child: CartButton(
                   context: context,
-                  totalPrice: totalSum.toInt(),
+                  totalPrice: double.parse(
+                    AppLocalizations.of(context)!.localeName == 'en'
+                        ? totalSum.toStringAsFixed(2)
+                        : totalSum.toStringAsFixed(0),
+                  ),
                 ),
               );
             }

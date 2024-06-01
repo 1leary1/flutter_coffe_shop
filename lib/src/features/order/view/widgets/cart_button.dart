@@ -1,9 +1,11 @@
 import 'package:coffe_shop/src/features/order/view/widgets/order_botom_sheet.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:coffe_shop/src/theme/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class CartButton extends StatefulWidget {
-  final int totalPrice;
+  final double totalPrice;
   final BuildContext context;
 
   const CartButton({
@@ -45,7 +47,7 @@ class _CartButtonState extends State<CartButton> {
         },
         icon: const Icon(Icons.shopping_basket_outlined),
         label: Text(
-          '${widget.totalPrice} ₽',
+          '${widget.totalPrice} ${AppLocalizations.of(context)!.localeName == 'en' ? "\$" : "₽"}',
           style: Theme.of(context).textTheme.headlineMedium,
         ),
         foregroundColor: AppColors.white,
