@@ -41,7 +41,7 @@ class _MapScreenState extends State<MapScreen> {
     return pointsDto
         .map(
           (point) => PlacemarkMapObject(
-            mapId: MapObjectId('MapObject $point'),
+            mapId: MapObjectId('MapObject ${point.address}'),
             point: Point(latitude: point.lat, longitude: point.lng),
             opacity: 1,
             icon: PlacemarkIcon.single(
