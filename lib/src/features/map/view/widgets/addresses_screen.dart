@@ -1,5 +1,6 @@
 import 'package:coffe_shop/src/features/map/bloc/address/address_bloc.dart';
 import 'package:coffe_shop/src/features/map/bloc/map/map_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:coffe_shop/src/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,7 +16,7 @@ class AddressesScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Наши кофейни',
+          AppLocalizations.of(context)!.ourShops,
           style: Theme.of(context).textTheme.titleLarge,
         ),
         bottom: const PreferredSize(
