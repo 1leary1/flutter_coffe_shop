@@ -32,6 +32,7 @@ class CoffeShop extends StatelessWidget {
 }
 
 void _initGetIt() {
+  GetIt.I.registerLazySingleton<bool>(() => true);
   GetIt.I.registerLazySingleton<List<CategoryModel>>(() => []);
   GetIt.I.registerLazySingleton<List<ProductModel>>(() => []);
   GetIt.I.registerLazySingleton<AddressBloc>(() => AddressBloc());

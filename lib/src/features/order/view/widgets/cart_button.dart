@@ -2,7 +2,6 @@ import 'package:coffe_shop/src/features/order/view/widgets/order_botom_sheet.dar
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:coffe_shop/src/theme/app_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class CartButton extends StatefulWidget {
   final double totalPrice;

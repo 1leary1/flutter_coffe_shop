@@ -20,7 +20,6 @@ final class DbMenuDataSource implements ISavableMenuDataSource {
       ..limit(limit);
 
     final result = await query.get();
-    print(result);
     List<Product> items = result
         .map((row) => Product(
               id: row.id,

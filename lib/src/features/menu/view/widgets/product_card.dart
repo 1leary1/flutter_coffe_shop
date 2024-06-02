@@ -126,7 +126,7 @@ class _ProductCardState extends State<ProductCard> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             CachedNetworkImage(
-              height: 100,
+              height: (MediaQuery.of(context).size.height - 200) / 7,
               imageUrl: widget.model.imageUrl,
               errorWidget: (context, url, error) => const Icon(
                 Icons.error,
