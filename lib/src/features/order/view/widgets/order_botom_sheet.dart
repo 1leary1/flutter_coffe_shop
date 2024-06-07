@@ -2,6 +2,7 @@ import 'package:coffe_shop/src/features/order/bloc/order_bloc.dart';
 import 'package:coffe_shop/src/features/order/view/widgets/order_item.dart';
 import 'package:coffe_shop/src/theme/app_colors.dart';
 import 'package:coffe_shop/src/theme/image_sources.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -36,7 +37,7 @@ class _OrderBottomSheetState extends State<OrderBottomSheet> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Ваш заказ',
+                AppLocalizations.of(context)!.yourOrder,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               TextButton(
@@ -103,7 +104,7 @@ class _OrderBottomSheetState extends State<OrderBottomSheet> {
               ),
             ),
             child: Text(
-              'Оформить заказ',
+              AppLocalizations.of(context)!.makeOrder,
               style: Theme.of(context).textTheme.headlineMedium,
             ),
           ),

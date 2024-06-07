@@ -1,5 +1,6 @@
 import 'package:coffe_shop/src/common/database/database.dart';
 import 'package:coffe_shop/src/features/menu/modeles/product_model.dart';
+import 'dart:ui' as ui;
 
 class MenuProductDto {
   final int id;
@@ -41,11 +42,13 @@ class MenuProductDto {
       };
 
   ProductModel toModel() {
+    final localeType = ui.window.locale;
     return ProductModel(
       id: id,
       imageUrl: imageUrl,
       name: name,
-      price: prices[0].value,
+      price:
+          localeType.toString() == 'en_US' ? prices[1].value : prices[0].value,
     );
   }
 

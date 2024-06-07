@@ -23,7 +23,7 @@ final class DbMenuDataSource implements ISavableMenuDataSource {
     List<Product> items = result
         .map((row) => Product(
               id: row.id,
-              page: row.id,
+              page: row.page,
               categoryId: row.categoryId,
               imageUrl: row.imageUrl,
               name: row.name,

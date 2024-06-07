@@ -1,4 +1,5 @@
 import 'package:coffe_shop/src/common/network/firebase_notifications.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:coffe_shop/src/features/map/bloc/address/address_bloc.dart';
 import 'package:coffe_shop/src/features/menu/modeles/category_model.dart';
 import 'package:coffe_shop/src/features/menu/modeles/product_model.dart';
@@ -22,6 +23,8 @@ class CoffeShop extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       theme: theme,
       home: const MenuScreen(),
     );
@@ -29,6 +32,7 @@ class CoffeShop extends StatelessWidget {
 }
 
 void _initGetIt() {
+  GetIt.I.registerLazySingleton<bool>(() => true);
   GetIt.I.registerLazySingleton<List<CategoryModel>>(() => []);
   GetIt.I.registerLazySingleton<List<ProductModel>>(() => []);
   GetIt.I.registerLazySingleton<AddressBloc>(() => AddressBloc());
